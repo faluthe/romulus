@@ -5,6 +5,7 @@
 #include "helper.h"
 #include "Hook.h"
 #include "hooks.h"
+#include "infopanel.h"
 #include "interfaces.h"
 
 void(__thiscall* oPaintTraverse)(IPanel*, unsigned int, bool, bool);
@@ -15,8 +16,7 @@ void __stdcall hkPaintTraverse(unsigned int panel, bool forceRepaint, bool allow
 	auto panelName{ interfaces::panel->GetName(panel) };
 	if (!strcmp(panelName, "MatSystemTopPanel"))
 	{
-		interfaces::surface->SetColor(255, 255, 255, 255);
-		interfaces::surface->DrawFilledRect(100, 100, 100, 100);
+		infopanel();
 	}
 }
 
