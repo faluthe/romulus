@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Color.h"
 
 // Hook indexes
@@ -36,4 +38,4 @@ ReturnType call_virtual_method(void* pInterface, unsigned int index)
 
 bool set_font(unsigned long& font, int size, int weight = 550);
 
-void print_text(const wchar_t* text, int x, int y, const Color& col);
+void print_text(std::wstring text, int x, int y, const Color& col);

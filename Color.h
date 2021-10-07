@@ -2,7 +2,7 @@
 
 struct Color
 {
-	const float r, g, b, a;
+	const int r, g, b, a;
 };
 
 namespace colors
