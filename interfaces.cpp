@@ -5,6 +5,7 @@
 #include "interfaces.h"
 #include "IPanel.h"
 #include "ISurface.h"
+#include "IVEngineClient.h"
 
 typedef	void* (*CreateInterfaceFn)(const char* name, int* returnCode);
 
@@ -24,6 +25,7 @@ namespace interfaces
 {
 	void init()
 	{
+		engine = get_interface<IVEngineClient>(GetModuleHandleA("engine.dll"), "VEngineClient014");
 		panel = get_interface<IPanel>(GetModuleHandleA("vgui2.dll"), "VGUI_Panel009");
 		surface = get_interface<ISurface>(GetModuleHandleA("vguimatsurface.dll"), "VGUI_Surface031");
 	}
