@@ -5,12 +5,26 @@
 #include "interfaces.h"
 #include "Panel.h"
 
-void Panel::add_entry(std::wstring panelTitle, std::wstring panelOption)
+Panel* Panel::add_entry(std::wstring panelTitle, std::wstring panelOption)
 {
-	if (children.empty())
-		children.push_back(Panel{ panelTitle, panelOption, x, y + h, w, h });
-	else
-		children.push_back(Panel{ panelTitle, panelOption, x, children.back().y + h, w, h });
+	Panel child{ panelTitle, panelOption, x, y + h, w, h };
+
+	if (!children.empty())
+		child.y = children.back().y + h;
+
+	children.push_back(child);
+	
+	return &children.back();
+}
+
+void Panel::set_option(int newOption)
+{
+	option = std::to_wstring(newOption);
+}
+
+void Panel::set_option(std::wstring newOption)
+{
+	option = newOption;
 }
 
 void Panel::draw()

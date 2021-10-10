@@ -5,11 +5,18 @@
 #include "Color.h"
 
 // Hook indexes
+#define INDEX_CREATE_MOVE 24
 #define INDEX_PAINT_T 41
 
 /* 
   Valve SDK indexes 
 */
+
+// IClientEntityList
+#define ENTLIST_GETENT 3
+
+// IBaseClientDll
+#define BASECLIENT_GETALL 8
 
 // IPanel
 #define PANEL_GETNAME 36
@@ -28,6 +35,7 @@
 
 // IVEngineClient
 #define ENGINE_GETSCREENSIZE 5
+#define ENGINE_GETLOCALENT 12
 
 template<typename ReturnType>
 ReturnType call_virtual_method(void* pInterface, unsigned int index)

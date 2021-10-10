@@ -9,4 +9,9 @@ public:
 	{
 		return call_virtual_method<void(__thiscall*)(void*, int&, int&)>(this, ENGINE_GETSCREENSIZE)(this, width, height);
 	}
+	
+	int GetLocalPlayer()
+	{
+		return call_virtual_method<int(__thiscall*)(void*)>(this, ENGINE_GETLOCALENT)(this);
+	}
 };

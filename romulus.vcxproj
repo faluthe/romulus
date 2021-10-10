@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\VS Projects\MH\minhook\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\VS Projects\MH\minhook\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\pat\source\repos\minhook\minhook-master\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\pat\source\repos\minhook\minhook-master\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\VS Projects\MH\minhook\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\VS Projects\MH\minhook\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\pat\source\repos\minhook\minhook-master\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\pat\source\repos\minhook\minhook-master\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -157,21 +157,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bunnyhop.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="helper.cpp" />
     <ClCompile Include="Hook.cpp" />
     <ClCompile Include="hooks.cpp" />
+    <ClCompile Include="infopanel.cpp" />
     <ClCompile Include="interfaces.cpp" />
     <ClCompile Include="netvars.cpp" />
+    <ClCompile Include="Panel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Config.h" />
+    <ClInclude Include="bunnyhop.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="CUserCmd.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="Hook.h" />
     <ClInclude Include="hooks.h" />
+    <ClInclude Include="IBaseClientDll.h" />
+    <ClInclude Include="IClientEntityList.h" />
+    <ClInclude Include="infopanel.h" />
     <ClInclude Include="interfaces.h" />
     <ClInclude Include="IPanel.h" />
     <ClInclude Include="ISurface.h" />
+    <ClInclude Include="IVEngineClient.h" />
     <ClInclude Include="netvars.h" />
+    <ClInclude Include="Panel.h" />
+    <ClInclude Include="Recv.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="libMinHook.x86.lib" />

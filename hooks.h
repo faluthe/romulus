@@ -4,6 +4,7 @@
 
 namespace hooks
 {
+	inline Hook clientMode;
 	inline Hook panel;
 
 	void init();

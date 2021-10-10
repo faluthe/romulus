@@ -2,9 +2,11 @@
 #include <string>
 
 #include "config.h"
+#include "Entity.h"
 #include "helper.h"
 #include "infopanel.h"
 #include "interfaces.h"
+#include "netvars.h"
 #include "Panel.h"
 
 unsigned long infoFont{};
@@ -12,25 +14,18 @@ int screenW, screenH;
 
 void debugpanel()
 {
-	static Panel debug{ L"Debug", L"...", screenW - (screenW / 8), screenH / 2, 220};
-	static bool e{};
-	if (!e)
-	{
-		debug.add_entry(L"Width", std::to_wstring(screenW));
-		debug.add_entry(L"Height", std::to_wstring(screenH));
-		debug.add_entry(L"Thomas", L"is awesome");
-		e = true;
-	}
-	debug.draw();
+	Entity* localplayer{ interfaces::entityList->GetClientEntity(interfaces::engine->GetLocalPlayer()) };
 
-	static Panel thomasPanel{ L"Thomas", L"", 100, 100, 500, 50 };
-	static bool e2{};
-	if (!e2)
+	static Panel debug{ L"Debug", L"", screenW - (screenW / 8), screenH / 2, 220};
+	static Panel* health{ debug.add_entry(L"Health") };
+	static Panel* flags{ debug.add_entry(L"Flags", std::to_wstring(netvars::flags)) };
+
+	if (localplayer)
 	{
-		thomasPanel.add_entry(L"hello", std::to_wstring(50.0f));
-		e2 = true;
+		health->set_option(L"Test");
 	}
-	thomasPanel.draw();
+
+	debug.draw();
 }
 
 void infopanel()

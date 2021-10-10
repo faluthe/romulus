@@ -14,6 +14,18 @@
     <ClCompile Include="Hook.cpp">
       <Filter>hooks</Filter>
     </ClCompile>
+    <ClCompile Include="infopanel.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="helper.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel.cpp">
+      <Filter>sdk\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="bunnyhop.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="config">
@@ -31,9 +43,18 @@
     <Filter Include="valve">
       <UniqueIdentifier>{ed64c5b9-1d28-4d30-9b95-16032a4ce7a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features">
+      <UniqueIdentifier>{dddfc57a-03cc-400d-8ff3-a709da96d2b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{ca578610-6e3e-4009-9c21-fc17d54b974b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\Panel">
+      <UniqueIdentifier>{04e99e55-ab36-457d-aaab-5efb87d8f3a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Config.h">
+    <ClInclude Include="config.h">
       <Filter>config</Filter>
     </ClInclude>
     <ClInclude Include="interfaces.h">
@@ -54,7 +75,37 @@
     <ClInclude Include="ISurface.h">
       <Filter>valve</Filter>
     </ClInclude>
+    <ClInclude Include="infopanel.h">
+      <Filter>features</Filter>
+    </ClInclude>
     <ClInclude Include="helper.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="IVEngineClient.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>sdk\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="IBaseClientDll.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="CUserCmd.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="bunnyhop.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="IClientEntityList.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="Recv.h">
       <Filter>valve</Filter>
     </ClInclude>
   </ItemGroup>

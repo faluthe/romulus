@@ -4,12 +4,12 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommand>D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\csgo.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Program Files %28x86%29\Steam\steamapps\common\Counter-Strike Global Offensive\csgo.exe</LocalDebuggerCommand>
     <LocalDebuggerAttach>true</LocalDebuggerAttach>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommand>D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\csgo.exe</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Program Files %28x86%29\Steam\steamapps\common\Counter-Strike Global Offensive\csgo.exe</LocalDebuggerCommand>
     <LocalDebuggerAttach>true</LocalDebuggerAttach>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
