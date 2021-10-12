@@ -3,10 +3,12 @@
 #include <Windows.h>
 
 #include "IBaseClientDll.h"
+#include "ICvar.h"
 #include "interfaces.h"
 #include "IPanel.h"
 #include "ISurface.h"
 #include "IVEngineClient.h"
+#include "IVModelRender.h"
 
 typedef	void* (*CreateInterfaceFn)(const char* name, int* returnCode);
 
@@ -28,8 +30,11 @@ namespace interfaces
 	{
 		client = get_interface<IBaseClientDll>(GetModuleHandleA("client.dll"), "VClient018");
 		clientMode = **(void***)((*(uintptr_t**)client)[0xA] + 0x5);
-		entityList = get_interface<IClientEntityList>(GetModuleHandleA("client.dll"), "VClientEntityList003");
+		cvar = get_interface<ICvar>(GetModuleHandleA("vstdlib.dll"), "VEngineCvar007");
 		engine = get_interface<IVEngineClient>(GetModuleHandleA("engine.dll"), "VEngineClient014");
+		entityList = get_interface<IClientEntityList>(GetModuleHandleA("client.dll"), "VClientEntityList003");
+		matSys = get_interface<IMaterialSystem>(GetModuleHandleA("materialsystem.dll"), "VMaterialSystem080");
+		mdlRender = get_interface<IVModelRender>(GetModuleHandleA("engine.dll"), "VEngineModel016");
 		panel = get_interface<IPanel>(GetModuleHandleA("vgui2.dll"), "VGUI_Panel009");
 		surface = get_interface<ISurface>(GetModuleHandleA("vguimatsurface.dll"), "VGUI_Surface031");
 	}

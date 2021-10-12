@@ -1,9 +1,6 @@
 #pragma once
 
-struct Vec3
-{
-	float x, y, z;
-};
+#include "Vec3.h"
 
 struct CUserCmd
 {

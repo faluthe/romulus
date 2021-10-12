@@ -9,20 +9,15 @@ enum class ClassId
 };
 
 class ClientClass;
-class IClientNetworkable;
-
-typedef IClientNetworkable* (*CreateClientClassFn)(int entnum, int serialNum);
-typedef IClientNetworkable* (*CreateEventFn)();
 
 class ClientClass
 {
 public:
-    CreateClientClassFn      m_pCreateFn;
-    CreateEventFn            m_pCreateEventFn;
-    char* m_pNetworkName;
+    char pad0[8];
+    char* networkName;
     RecvTable* recvTable;
     ClientClass* pNext;
-    ClassId                  m_ClassID;
+    ClassId classId;
 };
 
 class IBaseClientDll

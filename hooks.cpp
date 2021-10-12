@@ -3,6 +3,8 @@
 #include <stdexcept>
 
 #include "bunnyhop.h"
+#include "chams.h"
+#include "convars.h"
 #include "CUserCmd.h"
 #include "helper.h"
 #include "Hook.h"
@@ -10,28 +12,39 @@
 #include "infopanel.h"
 #include "interfaces.h"
 
-bool(__stdcall* oCreateMove)(float, CUserCmd*);
-void(__thiscall* oPaintTraverse)(IPanel*, unsigned int, bool, bool);
+bool __stdcall hkCreateMove(float inputSampleTime, CUserCmd* cmd)
+{
+	auto setAngles{ hooks::oCreateMove(inputSampleTime, cmd) };
+	if (!cmd->commandNumber)
+		return setAngles;
+
+	bunnyhop(cmd);
+	convars::set();
+
+	return false;
+}
+
+void __fastcall hkDrawModelExecute(void* _this, void* _edx, void* context, const ModelRenderInfo_t& state, const ModelRenderInfo_t& pInfo, void* pCustomBoneToWorld)
+{
+	if (interfaces::mdlRender->IsForcedMaterialOverride())
+		return hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
+
+	chams(pInfo);
+
+	hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
+
+	interfaces::mdlRender->ForcedMaterialOverride(nullptr);
+}
 
 void __stdcall hkPaintTraverse(unsigned int panel, bool forceRepaint, bool allowRepaint)
 {
-	oPaintTraverse(interfaces::panel, panel, forceRepaint, allowRepaint);
+	hooks::oPaintTraverse(interfaces::panel, panel, forceRepaint, allowRepaint);
+	
 	auto panelName{ interfaces::panel->GetName(panel) };
 	if (!strcmp(panelName, "MatSystemTopPanel"))
 	{
 		infopanel();
 	}
-}
-
-bool __stdcall hkCreateMove(float inputSampleTime, CUserCmd* cmd)
-{
-	auto setAngles{ oCreateMove(inputSampleTime, cmd) };
-	if (!cmd->commandNumber)
-		return setAngles;
-
-	bunnyhop(cmd);
-
-	return false;
 }
 
 namespace hooks
@@ -40,12 +53,16 @@ namespace hooks
 	{
 		if (MH_Initialize() != MH_OK)
 			throw std::runtime_error("Minhook error.");
+
+		convars::spoof();
 		
 		clientMode = Hook{ interfaces::clientMode };
+		mdlRender = Hook{ interfaces::mdlRender };
 		panel = Hook{ interfaces::panel };
 
-		clientMode.hookFunc(INDEX_CREATE_MOVE, &hkCreateMove, (void**)&oCreateMove);
-		panel.hookFunc(INDEX_PAINT_T, &hkPaintTraverse, (void**)&oPaintTraverse);
+		clientMode.hookFunc(INDEX_CREATE_MOVE, &hkCreateMove, reinterpret_cast<void**>(&oCreateMove));
+		mdlRender.hookFunc(INDEX_DME, &hkDrawModelExecute, reinterpret_cast<void**>(&oDrawModelExecute));
+		panel.hookFunc(INDEX_PAINT_T, &hkPaintTraverse, reinterpret_cast<void**>(&oPaintTraverse));
 
 		if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
 			throw std::runtime_error("Minhook error.");
@@ -58,5 +75,7 @@ namespace hooks
 		
 		if (MH_Uninitialize() != MH_OK)
 			throw std::runtime_error("Minhook error.");
+
+		convars::restore();
 	}
 }

@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <Windows.h>
 
+#include "convars.h"
 #include "hooks.h"
 #include "interfaces.h"
 #include "netvars.h"
@@ -25,7 +26,14 @@ DWORD WINAPI init(HMODULE hModule)
     while (!(GetAsyncKeyState(VK_END) & 1))
         Sleep(1000);
 
-    hooks::restore();
+    try
+    {
+        hooks::restore();
+    }
+    catch (const std::exception& e)
+    {
+        MessageBoxA(NULL, e.what(), NULL, MB_OK | MB_ICONWARNING);
+    }
 
     FreeLibraryAndExitThread(hModule, 0);
 }

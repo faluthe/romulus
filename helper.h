@@ -6,17 +6,35 @@
 
 // Hook indexes
 #define INDEX_CREATE_MOVE 24
+#define INDEX_DME 21
 #define INDEX_PAINT_T 41
 
 /* 
   Valve SDK indexes 
 */
 
+// ConVar
+#define CONVAR_GETVALUE 13
+#define CONVAR_SETVALUE 16
+
 // IClientEntityList
 #define ENTLIST_GETENT 3
 
+// ICvar
+#define ICVAR_REGISTER 10
+#define ICVAR_UNREGISTER 11
+#define ICVAR_FINDVAR 15
+
 // IBaseClientDll
 #define BASECLIENT_GETALL 8
+
+// IMaterial
+#define IMAT_ALPHAMOD 27
+#define IMAT_COLORMOD 28
+#define IMAT_SETMATFLAG 29
+
+// IMaterialSystem
+#define IMATSYS_FINDMAT 84
 
 // IPanel
 #define PANEL_GETNAME 36
@@ -36,6 +54,10 @@
 // IVEngineClient
 #define ENGINE_GETSCREENSIZE 5
 #define ENGINE_GETLOCALENT 12
+
+// IVModelRender
+#define MDLRENDER_FORCEMATOVERIDE 1
+#define MDLRENDER_ISFORCEDMAT 2
 
 template<typename ReturnType>
 ReturnType call_virtual_method(void* pInterface, unsigned int index)

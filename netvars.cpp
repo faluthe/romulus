@@ -34,7 +34,8 @@ uintptr_t get_netvar(const char* tableName, const char* netvarName)
 		if (!_stricmp(tableName, curNode->recvTable->netTableName))
 			return check_recvTable(curNode->recvTable, tableName, netvarName);
 	}
-	return 0;
+
+	throw std::runtime_error(std::string("Failed to get netvar:") + netvarName);
 }
 
 namespace netvars
@@ -44,11 +45,8 @@ namespace netvars
 		clientClass = interfaces::client->GetAllClasses();
 
 		flags = get_netvar("DT_CSPlayer", "m_fFlags");
-		if (!flags)
-			throw std::runtime_error("Flags Netvar is null");
-
 		health = get_netvar("DT_BasePlayer", "m_iHealth");
-		if (!health)
-			throw std::runtime_error("Health Netvar is null");
+		moveType = get_netvar("DT_CSPlayer", "m_nRenderMode") + 1;
+		team = get_netvar("DT_BasePlayer", "m_iTeamNum");
 	}
 }
