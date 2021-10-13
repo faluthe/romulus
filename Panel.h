@@ -3,23 +3,30 @@
 #include <string>
 #include <vector>
 
-class Panel
+class ChildPanel
+{
+public:
+	std::wstring title;
+	std::wstring option;
+	bool hidden{ false };
+};
+
+class DynamicPanel
 {
 private:
 	int x, y;
 	int w, h;
+	unsigned int font;
 	std::wstring title;
-	std::wstring option;
-	Panel* previous{};
-	Panel* next{};
-	void add_next(Panel* nextPanel);
 public:
-	Panel(std::wstring title, std::wstring option, int x, int y, int w = 250, int h = 30)
-		: x{ x }, y{ y }, w{ w }, h{ h }, title{ title }, option{ option }
+	std::vector<ChildPanel> children;
+	DynamicPanel(std::wstring title, unsigned int font, int x, int y, int w = 250, int h = 30)
+		: title{ title }, font{ font }, x{ x }, y{ y }, w{ w }, h{ h }
 	{
 	}
-	Panel add_entry(Panel* nextPanel, std::wstring panelTitle, std::wstring panelOption = L"");
-	void set_option(int option);
-	void set_option(std::wstring newOption);
+	int add_child(std::wstring childTitle, std::wstring childOption = L"");
+	void hide(int index);
+	void display(int index, std::wstring displayOption);
+	void display(int index, int displayOption);
 	void draw();
 };

@@ -5,38 +5,33 @@
 #include "interfaces.h"
 #include "Panel.h"
 
-Panel Panel::add_entry(Panel* nextPanel, std::wstring panelTitle, std::wstring panelOption)
+int DynamicPanel::add_child(std::wstring childTitle, std::wstring childOption)
 {
-	if (next)
-		return next->add_entry(nextPanel, panelTitle, panelOption);
+	ChildPanel child{ childTitle, childOption };
 
-	Panel child{ panelTitle, panelOption, x, y + h, w, h };
+	children.push_back(child);
 
-	if (previous)
-		child.y = previous->y + h;
-	
-	add_next(nextPanel);
-
-	return child;
+	return children.size() - 1;
 }
 
-void Panel::add_next(Panel* nextPanel)
+void DynamicPanel::hide(int index)
 {
-	next = nextPanel;
-	next->previous = this;
+	children.at(index).hidden = true;
 }
 
-void Panel::set_option(int newOption)
+void DynamicPanel::display(int index, std::wstring displayOption)
 {
-	option.assign(std::to_wstring(newOption));
+	children.at(index).hidden = false;
+	children.at(index).option = displayOption;
 }
 
-void Panel::set_option(std::wstring newOption)
+void DynamicPanel::display(int index, int displayOption)
 {
-	option.assign(newOption);
+	children.at(index).hidden = false;
+	children.at(index).option = std::to_wstring(displayOption);
 }
 
-void Panel::draw()
+void DynamicPanel::draw()
 {
 	interfaces::surface->DrawSetColor(colors::grey);
 
@@ -44,11 +39,26 @@ void Panel::draw()
 	interfaces::surface->DrawSetColor(colors::black);
 	interfaces::surface->DrawOutlinedRect(x - 1, y - 1, (x + w) + 1, (y + h) + 1);
 
-	interfaces::surface->DrawLine((x + (x + w)) / 2, y, (x + (x + w)) / 2, y + h);
+	int wide, tall;
+	interfaces::surface->GetTextSize(font, title.c_str(), wide, tall);
 
-	print_text(title, x + 10, y + 5, colors::white);
-	print_text(option, ((x + (x + w)) / 2) + 10, y + 5, colors::white);
+	print_text(title, ((x + (x + w)) / 2) - (wide / 2), y + h / 4, colors::white);
 
-	if (next)
-		next->draw();
+	for (size_t i{ 0 }, offset{ static_cast<size_t>(y + h) }; i < children.size(); i++)
+	{
+		if (!children.at(i).hidden)
+		{
+			interfaces::surface->DrawSetColor(colors::grey);
+			interfaces::surface->DrawFilledRect(x, offset, x + w, offset + h);
+			interfaces::surface->DrawSetColor(colors::black);
+			interfaces::surface->DrawOutlinedRect(x - 1, offset - 1, (x + w) + 1, (offset + h) + 1);
+
+			interfaces::surface->DrawLine((x + (x + w)) / 2, offset, (x + (x + w)) / 2, offset + h);
+
+			print_text(children.at(i).title, x + 10, offset + 5, colors::white);
+			print_text(children.at(i).option, ((x + (x + w)) / 2) + 10, offset + 5, colors::white);
+			
+			offset += h;
+		}
+	}
 }

@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <string>
+#include <vector>
 #include <Windows.h>
 
 #include "config.h"
@@ -16,23 +17,42 @@ int screenW, screenH;
 
 void debugpanel()
 {
+	static DynamicPanel debug{ L"Test", infoFont, screenW - (screenW / 5), screenH / 2 };
+
+	static int flags{ debug.add_child(L"netvars::flags", std::to_wstring(netvars::flags)) };
+	static int viewmodel{ debug.add_child(L"viewmodel_fov") };
+	static int moveType{ debug.add_child(L"Move type") };
+	static int health{ debug.add_child(L"Health") };
+	static int playerFlags{ debug.add_child(L"Player's flags") };
+	static int weaponType{ debug.add_child(L"Weapon type") };
+	static int maxPlayers{ debug.add_child(L"Players") };
+
+	debug.display(viewmodel, std::to_wstring(convars::viewmodel_fov->GetValue()));
+
 	Entity* localplayer{ interfaces::entityList->GetClientEntity(interfaces::engine->GetLocalPlayer()) };
-
-	static Panel debug{ L"Debug", L"", screenW - (screenW / 7), screenH / 2 };
-	
-	static Panel health{ debug.add_entry(&health, L"Health") };
-	static Panel flags{ debug.add_entry(&flags, L"Flags", std::to_wstring(netvars::flags)) };
-	static Panel playerFlags{ debug.add_entry(&playerFlags, L"Player Flags") };
-	static Panel viewmodel{ debug.add_entry(&viewmodel, L"viewmodel_fov") };
-	static Panel moveType{ debug.add_entry(&moveType, L"Move Type") };
-
-	viewmodel.set_option(convars::viewmodel_fov->GetValue());
 
 	if (localplayer)
 	{
-		health.set_option(localplayer->health());
-		playerFlags.set_option(localplayer->flags());
-		moveType.set_option(localplayer->moveType());
+		debug.display(health, std::to_wstring(localplayer->health()));
+		debug.display(moveType, std::to_wstring(localplayer->moveType()));
+		debug.display(playerFlags, std::to_wstring(localplayer->flags()));
+		if (localplayer->activeWeapon())
+			debug.display(weaponType, weapontype_to_wstring(localplayer->activeWeapon()->weaponType()));
+		int players{};
+		for (int i{ 1 }; i < interfaces::engine->GetMaxClients(); i++)
+		{
+			if (interfaces::entityList->GetClientEntity(i))
+				players++;
+		}
+		debug.display(maxPlayers, std::to_wstring(players));
+	}
+	else
+	{
+		debug.hide(health);
+		debug.hide(moveType);
+		debug.hide(playerFlags);
+		debug.hide(weaponType);
+		debug.hide(maxPlayers);
 	}
 
 	debug.draw();
@@ -46,8 +66,8 @@ void infopanel()
 
 	interfaces::engine->GetScreenSize(screenW, screenH);
 
-	static Panel info{ L"Romulus", L"", screenW - (screenW / 5), 1 };
-	info.set_option(config::mode);
+	static DynamicPanel info{ L"Romulus", infoFont, screenW - 101, 1, 100 };
+
 	info.draw();
 
 	if (config::mode == 0)
