@@ -8,48 +8,74 @@
 
 IMaterial* material{};
 
-void placeholder_func(const Color& col, float alpha = 255.0f)
+void setup_material(const Color& col, bool ignoreZ = false, bool wireframe = false, float alpha = 255.0f)
 {
+	if (!material)
+		material = interfaces::matSys->FindMaterial("debug/debugambientcube", "Model textures");
+
 	material->ColorModulate(col.r / 255.0f, col.g / 255.0f, col.b / 255.0f);
 	material->AlphaModulate(alpha / 255.0f);
+	material->SetMaterialVarFlags(1 << 15, ignoreZ);
+	material->SetMaterialVarFlags(1 << 28, wireframe);
 
 	interfaces::mdlRender->ForcedMaterialOverride(material);
 }
 
-void chams(const ModelRenderInfo_t& pInfo)
+void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& state, const ModelRenderInfo_t& pInfo, void* pCustomBoneToWorld)
 {
 	if (!pInfo.pModel)
 		return;
 
 	const auto mdl{ pInfo.pModel };
 
-	if (!material)
-		material = interfaces::matSys->FindMaterial("debug/debugambientcube", "Model textures");
+	Entity* localplayer{ interfaces::entityList->GetClientEntity(interfaces::engine->GetLocalPlayer()) };
 
 	if (strstr(mdl->name, "models/player") != nullptr)
 	{
-		Entity* localplayer{ interfaces::entityList->GetClientEntity(interfaces::engine->GetLocalPlayer()) };
 		Entity* ent{ interfaces::entityList->GetClientEntity(pInfo.entityIndex) };
 
-		if (!ent || ent->dormant() || ent->health() == 0)
+		if (!localplayer || !ent || ent->dormant() || ent->health() == 0)
 			return;
 
-		// material->SetMaterialVarFlags(1 << 15, false);
 		if (localplayer->team() != ent->team())
-			placeholder_func(colors::orange);
+		{
+			setup_material(colors::darkOrange, true);
+			hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
+			setup_material(colors::orange);
+		}
 		else
-			placeholder_func(colors::blue);
+			setup_material(colors::blue);
 	}
 	else if (strstr(mdl->name, "sleeve") != nullptr)
 	{
-		placeholder_func(colors::orange, 255.0f / 4.0f);
+		setup_material(colors::orange, false, true);
 	}
 	else if (strstr(mdl->name, "arms") != nullptr)
 	{
-		placeholder_func(colors::grey);
+		setup_material(colors::orange, false, false, 255.0f / 2.0f);
 	}
 	else if (strstr(mdl->name, "models/weapons/v_") != nullptr)
 	{
-		placeholder_func(colors::white);
+		if (localplayer->isScoped())
+			return;
+
+		const auto activeWeapon{ localplayer->activeWeapon() };
+		if (activeWeapon && activeWeapon->weaponType() == 0)
+		{
+			static float alpha{ 255.0f };
+			static bool countup{ false };
+			if (!countup && alpha > 0.0f)
+				alpha -= 0.5f;
+			if (alpha <= 0.0f)
+				countup = true;
+			if (countup && alpha < 255.0f)
+				alpha += 0.5f;
+			if (alpha >= 255.0f)
+				countup = false;
+				
+			setup_material(colors::black, false, false, alpha);
+		}
+		else
+			setup_material(colors::white);
 	}
 }

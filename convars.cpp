@@ -8,10 +8,19 @@ namespace convars
 {
 	void set()
 	{
+		const auto localplayer{ interfaces::entityList->GetClientEntity(interfaces::engine->GetLocalPlayer()) };
+		const auto activeWeapon{ localplayer->activeWeapon() };
+
 		interfaces::cvar->FindVar("cl_grenadepreview")->SetValue(1);
 		interfaces::cvar->FindVar("mat_postprocess_enable")->SetValue(1);
 		interfaces::cvar->FindVar("weapon_debug_spread_show")->SetValue(2);
 		interfaces::cvar->FindVar("cl_crosshair_recoil")->SetValue(1);
+
+		auto righthand{ interfaces::cvar->FindVar("cl_righthand") };
+		if (activeWeapon && activeWeapon->weaponType() == 0)
+			righthand->SetValue(0);
+		else
+			righthand->SetValue(1);
 	}
 
 	void restore()
@@ -20,6 +29,7 @@ namespace convars
 		interfaces::cvar->FindVar("mat_postprocess_enable")->SetValue(0);
 		interfaces::cvar->FindVar("weapon_debug_spread_show")->SetValue(0);
 		interfaces::cvar->FindVar("cl_crosshair_recoil")->SetValue(0);
+		interfaces::cvar->FindVar("cl_righthand")->SetValue(1);
 
 		delete viewmodel_fov;
 		delete viewmodel_offset_x;

@@ -27,15 +27,15 @@ void debugpanel()
 	static int weaponType{ debug.add_child(L"Weapon type") };
 	static int maxPlayers{ debug.add_child(L"Players") };
 
-	debug.display(viewmodel, std::to_wstring(convars::viewmodel_fov->GetValue()));
+	debug.display(viewmodel, convars::viewmodel_fov->GetValue());
 
 	Entity* localplayer{ interfaces::entityList->GetClientEntity(interfaces::engine->GetLocalPlayer()) };
 
 	if (localplayer)
 	{
-		debug.display(health, std::to_wstring(localplayer->health()));
-		debug.display(moveType, std::to_wstring(localplayer->moveType()));
-		debug.display(playerFlags, std::to_wstring(localplayer->flags()));
+		debug.display(health, localplayer->health());
+		debug.display(moveType, localplayer->moveType());
+		debug.display(playerFlags, localplayer->flags());
 		if (localplayer->activeWeapon())
 			debug.display(weaponType, weapontype_to_wstring(localplayer->activeWeapon()->weaponType()));
 		int players{};
@@ -44,7 +44,7 @@ void debugpanel()
 			if (interfaces::entityList->GetClientEntity(i))
 				players++;
 		}
-		debug.display(maxPlayers, std::to_wstring(players));
+		debug.display(maxPlayers, players);
 	}
 	else
 	{

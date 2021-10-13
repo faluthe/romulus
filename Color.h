@@ -12,4 +12,5 @@ namespace colors
 	constexpr Color white{ 255, 255, 255, 255 };
 	constexpr Color orange{ 255, 127, 39, 255 };
 	constexpr Color blue{ 15, 192, 252 };
+	constexpr Color darkOrange{ 255, 79, 20, 255 };
 }

@@ -46,7 +46,10 @@ namespace netvars
 
 		flags = get_netvar("DT_CSPlayer", "m_fFlags");
 		health = get_netvar("DT_BasePlayer", "m_iHealth");
+		isScoped = get_netvar("DT_CSPlayer", "m_bIsScoped");
+		itemDefIndex = get_netvar("DT_BaseCombatWeapon", "m_iItemDefinitionIndex");
 		moveType = get_netvar("DT_CSPlayer", "m_nRenderMode") + 1;
+		nextPrimaryAttack = get_netvar("DT_BaseCombatWeapon", "m_flNextPrimaryAttack");
 		team = get_netvar("DT_BasePlayer", "m_iTeamNum");
 	}
 }

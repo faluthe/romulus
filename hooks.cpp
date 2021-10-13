@@ -2,6 +2,7 @@
 #include <MinHook.h>
 #include <stdexcept>
 
+#include "autopistol.h"
 #include "bunnyhop.h"
 #include "chams.h"
 #include "convars.h"
@@ -18,6 +19,7 @@ bool __stdcall hkCreateMove(float inputSampleTime, CUserCmd* cmd)
 	if (!cmd->commandNumber)
 		return setAngles;
 
+	autopistol(cmd);
 	bunnyhop(cmd);
 	convars::set();
 
@@ -29,7 +31,7 @@ void __fastcall hkDrawModelExecute(void* _this, void* _edx, void* context, const
 	if (interfaces::mdlRender->IsForcedMaterialOverride())
 		return hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
 
-	chams(pInfo);
+	chams(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
 
 	hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
 

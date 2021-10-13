@@ -60,4 +60,9 @@ public:
 	{
 		return call_virtual_method<bool(__thiscall*)(void*, unsigned long, const char*, int, int, int, int, int, int, int)>(this, SURFACE_SETGLYPH)(this, font, windowsFontName, tall, weight, blur, scanlines, flags, nRangeMin, nRangeMax);
 	}
+
+	void GetTextSize(unsigned int font, const wchar_t* text, int& wide, int& tall)
+	{
+		return call_virtual_method<void(__thiscall*)(void*, unsigned int, const wchar_t*, int&, int&)>(this, SURFACE_GETSIZE)(this, font, text, wide, tall);
+	}
 };

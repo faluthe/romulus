@@ -14,4 +14,9 @@ public:
 	{
 		return call_virtual_method<int(__thiscall*)(void*)>(this, ENGINE_GETLOCALENT)(this);
 	}
+
+	int GetMaxClients()
+	{
+		return call_virtual_method<int(__thiscall*)(void*)>(this, ENGINE_MAXCLIENTS)(this);
+	}
 };
