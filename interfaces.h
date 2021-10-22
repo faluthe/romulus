@@ -3,10 +3,12 @@
 #include "IBaseClientDll.h"
 #include "IClientEntityList.h"
 #include "ICvar.h"
+#include "IEngineTrace.h"
 #include "IMaterialSystem.h"
 #include "IPanel.h"
 #include "ISurface.h"
 #include "IVEngineClient.h"
+#include "IVModelInfo.h"
 #include "IVModelRender.h"
 
 namespace interfaces
@@ -16,7 +18,9 @@ namespace interfaces
 	inline ICvar* cvar{};
 	inline IVEngineClient* engine{};
 	inline IClientEntityList* entityList{};
+	inline IEngineTrace* engineTrace{};
 	inline IMaterialSystem* matSys{};
+	inline IVModelInfo* mdlInfo{};
 	inline IVModelRender* mdlRender{};
 	inline IPanel* panel{};
 	inline ISurface* surface{};

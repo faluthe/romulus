@@ -1,5 +1,5 @@
 #pragma once
 
-#include "CUserCmd.h"
+struct CUserCmd;
 
 void autopistol(CUserCmd* cmd);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vec3.h"
+#include "Vector.h"
 
 struct CUserCmd
 {
@@ -20,8 +20,8 @@ struct CUserCmd
 	void* vmt;
 	int commandNumber;
 	int tickCount;
-	Vec3 viewAngles;
-	Vec3 aimDirection;
+	Vector viewAngles;
+	Vector aimDirection;
 	float forwardmove;
 	float sidemove;
 	float upmove;

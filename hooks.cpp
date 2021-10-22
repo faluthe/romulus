@@ -6,18 +6,22 @@
 #include "bunnyhop.h"
 #include "chams.h"
 #include "convars.h"
-#include "CUserCmd.h"
-#include "helper.h"
+#include "esp.h"
 #include "Hook.h"
 #include "hooks.h"
 #include "infopanel.h"
 #include "interfaces.h"
+#include "localplayer.h"
+
+struct CUserCmd;
 
 bool __stdcall hkCreateMove(float inputSampleTime, CUserCmd* cmd)
 {
 	auto setAngles{ hooks::oCreateMove(inputSampleTime, cmd) };
 	if (!cmd->commandNumber)
 		return setAngles;
+
+	localplayerUtils::get();
 
 	autopistol(cmd);
 	bunnyhop(cmd);
@@ -45,6 +49,7 @@ void __stdcall hkPaintTraverse(unsigned int panel, bool forceRepaint, bool allow
 	auto panelName{ interfaces::panel->GetName(panel) };
 	if (!strcmp(panelName, "MatSystemTopPanel"))
 	{
+		render_esp();
 		infopanel();
 	}
 }
@@ -56,8 +61,6 @@ namespace hooks
 		if (MH_Initialize() != MH_OK)
 			throw std::runtime_error("Minhook error.");
 
-		convars::spoof();
-		
 		clientMode = Hook{ interfaces::clientMode };
 		mdlRender = Hook{ interfaces::mdlRender };
 		panel = Hook{ interfaces::panel };
@@ -68,6 +71,8 @@ namespace hooks
 
 		if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
 			throw std::runtime_error("Minhook error.");
+
+		convars::spoof();
 	}
 	
 	void restore()

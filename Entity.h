@@ -3,9 +3,47 @@
 #include "helper.h"
 #include "netvars.h"
 
+class ClientClass;
+class Matrix;
+struct model_t;
+class Vector;
+
+class WeaponEntity
+{
+public:
+	int weaponType()
+	{
+		return call_virtual_method<int(__thiscall*)(void*)>(this, WEAPONENTITY_WEAPON_TYPE)(this);
+	}
+
+	int itemDefinitionIndex()
+	{
+		return *reinterpret_cast<int*>(this + netvars::itemDefIndex);
+	}
+
+	bool isKnife() { return weaponType() == 0; }
+	bool isPistol() { return weaponType() == 1; }
+	bool isRevolver() { return (itemDefinitionIndex() == 64 || itemDefinitionIndex() == 262208); }
+};
+
 class Entity
 {
 public:
+	void* animating()
+	{
+		return reinterpret_cast<void*>(this + 0x4);
+	}
+
+	void* networkable()
+	{
+		return reinterpret_cast<void*>(this + 0x8);
+	}
+
+	model_t* model()
+	{
+		return call_virtual_method<model_t* (__thiscall*)(void*)>(animating(), ENTITY_MODEL)(animating());
+	}
+
 	int health()
 	{
 		return *reinterpret_cast<int*>(this + netvars::health);
@@ -41,18 +79,48 @@ public:
 		return *reinterpret_cast<float*>(this + netvars::nextPrimaryAttack);
 	}
 
-	int itemDefinitionIndex()
+	bool isAlive()
 	{
-		return *reinterpret_cast<int*>(this + netvars::itemDefIndex);
+		return (health() > 0);
 	}
 
-	Entity* activeWeapon()
+	Vector& absOrigin()
 	{
-		return call_virtual_method<Entity* (__thiscall*)(void*)>(this, ENTITY_ACTIVE_WEAPON)(this);
+		return call_virtual_method<Vector& (__thiscall*)(void*)>(this, ENTITY_ABSORIGIN)(this);
 	}
 
-	int weaponType()
+	Vector eyePosition()
 	{
-		return call_virtual_method<int(__thiscall*)(void*)>(this, ENTITY_WEAPON_TYPE)(this);
+		Vector v;
+		call_virtual_method<void(__thiscall*)(void*, Vector&)>(this, ENTITY_EYEPOS)(this, v);
+		return v;
 	}
+
+	Vector aimPunch()
+	{
+		Vector v;
+		call_virtual_method<void(__thiscall*)(void*, Vector&)>(this, ENTITY_AIMPUNCH)(this, v);
+		return v;
+	}
+
+	bool isPlayer()
+	{
+		return call_virtual_method<bool(__thiscall*)(void*)>(this, ENTITY_ISPLAYER)(this);
+	}
+
+	ClientClass* clientClass()
+	{
+		return call_virtual_method<ClientClass* (__thiscall*)(void*)>(networkable(), ENTITY_CLIENTCLASS)(networkable());
+	}
+
+	bool setupBones(Matrix* out, int max, int mask, float time)
+	{
+		return call_virtual_method<bool(__thiscall*)(void*, Matrix*, int, int, float)>(animating(), ENTITY_SETUPBONES)(animating(), out, max, mask, time);
+	}
+
+	WeaponEntity* activeWeapon();
+
+	Vector hitboxPos(int id);
+
+	bool isGrenade();
 };

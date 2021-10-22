@@ -1,18 +1,19 @@
-#include "autopistol.h"
 #include "CUserCmd.h"
-#include "interfaces.h"
+#include "localplayer.h"
 
 void autopistol(CUserCmd* cmd)
 {
-	const auto localplayer{ interfaces::entityList->GetClientEntity(interfaces::engine->GetLocalPlayer()) };
+	if (!localplayer || !localplayer->isAlive())
+		return;
+
 	const auto activeWeapon{ localplayer->activeWeapon() };
 	
-	if (!activeWeapon || activeWeapon->weaponType() != 1)
+	if (!activeWeapon || !activeWeapon->isPistol())
 		return;
 
 	static bool firing{ false };
 
-	if (firing && activeWeapon->itemDefinitionIndex() != 64)
+	if (firing && !activeWeapon->isRevolver())
 		cmd->buttons &= ~CUserCmd::IN_ATTACK;
 
 	firing = cmd->buttons & CUserCmd::IN_ATTACK ? true : false;

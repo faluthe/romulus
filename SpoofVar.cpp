@@ -2,7 +2,7 @@
 #include "interfaces.h"
 #include "SpoofVar.h"
 
-SpoofVar::SpoofVar(ConVar* pConVar, const char* newNameVal, int newVal)
+SpoofVar::SpoofVar(ConVar* pConVar, const char* newNameVal, float newVal)
 	: pOgConVar{ pConVar }
 {
 	newValue = newVal;
@@ -11,11 +11,11 @@ SpoofVar::SpoofVar(ConVar* pConVar, const char* newNameVal, int newVal)
 	{
 		interfaces::cvar->UnregisterConCommand(pOgConVar);
 		originalName = pOgConVar->name;
-		originalValue = pOgConVar->GetValue();
+		originalValue = pOgConVar->GetFloat();
 		
 		pOgConVar->name = newName;
 		interfaces::cvar->RegisterConCommand(pOgConVar);
-		pOgConVar->SetValue(newVal);
+		pOgConVar->SetFloat(newVal);
 	}
 }
 
@@ -25,17 +25,17 @@ SpoofVar::~SpoofVar()
 	{
 		interfaces::cvar->UnregisterConCommand(pOgConVar);
 		pOgConVar->name = originalName;
-		pOgConVar->SetValue(originalValue);
+		pOgConVar->SetFloat(originalValue);
 		interfaces::cvar->RegisterConCommand(pOgConVar);
 	}
 }
 
-int SpoofVar::GetValue()
+float SpoofVar::GetFloat()
 {
-	return pOgConVar->GetValue();
+	return pOgConVar->GetFloat();
 }
 
-void SpoofVar::SetValue(int newVal)
+void SpoofVar::SetValue(float newVal)
 {
-	pOgConVar->SetValue(newVal);
+	pOgConVar->SetFloat(newVal);
 }

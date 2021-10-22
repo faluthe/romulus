@@ -5,7 +5,10 @@
 
 enum class ClassId
 {
-	BaseNPC = 0
+	GrenadeProjectile = 9,
+	DecoyProjectile = 48,
+	MolotovProjectile = 114,
+	SmokeProjectile = 157,
 };
 
 class ClientClass;

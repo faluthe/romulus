@@ -8,11 +8,11 @@ private:
 	ConVar* pOgConVar;
 	const char* originalName;
 	const char* newName;
-	int originalValue;
-	int newValue;
+	float originalValue;
+	float newValue;
 public:
-	SpoofVar(ConVar* pConVar, const char* newName, int newVal);
+	SpoofVar(ConVar* pConVar, const char* newName, float newVal);
 	~SpoofVar();
-	int GetValue();
-	void SetValue(int newValue);
+	float GetFloat();
+	void SetValue(float newValue);
 };

@@ -28,5 +28,6 @@ public:
 	void hide(int index);
 	void display(int index, std::wstring displayOption);
 	void display(int index, int displayOption);
+	void display(int index, float displayOption);
 	void draw();
 };

@@ -3,7 +3,8 @@
 #include "CUserCmd.h"
 #include "Hook.h"
 #include "IPanel.h"
-#include "IVModelRender.h"
+
+struct ModelRenderInfo_t;
 
 namespace hooks
 {

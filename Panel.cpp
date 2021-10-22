@@ -1,7 +1,6 @@
 #include <vector>
 
 #include "Color.h"
-#include "helper.h"
 #include "interfaces.h"
 #include "Panel.h"
 
@@ -31,16 +30,25 @@ void DynamicPanel::display(int index, int displayOption)
 	children.at(index).option = std::to_wstring(displayOption);
 }
 
+void DynamicPanel::display(int index, float displayOption)
+{
+	children.at(index).hidden = false;
+	auto wstr{ std::to_wstring(displayOption) };
+	wstr.erase(wstr.begin() + wstr.find(L'.') + 2, wstr.end()); // One point of precision
+	children.at(index).option = wstr;
+}
+
 void DynamicPanel::draw()
 {
-	interfaces::surface->DrawSetColor(colors::grey);
+	using namespace interfaces;
+	surface->DrawSetColor(colors::grey);
 
-	interfaces::surface->DrawFilledRect(x, y, x + w, y + h);
-	interfaces::surface->DrawSetColor(colors::black);
-	interfaces::surface->DrawOutlinedRect(x - 1, y - 1, (x + w) + 1, (y + h) + 1);
+	surface->DrawFilledRect(x, y, x + w, y + h);
+	surface->DrawSetColor(colors::black);
+	surface->DrawOutlinedRect(x - 1, y - 1, (x + w) + 1, (y + h) + 1);
 
 	int wide, tall;
-	interfaces::surface->GetTextSize(font, title.c_str(), wide, tall);
+	surface->GetTextSize(font, title.c_str(), wide, tall);
 
 	print_text(title, ((x + (x + w)) / 2) - (wide / 2), y + h / 4, colors::white);
 
@@ -48,12 +56,12 @@ void DynamicPanel::draw()
 	{
 		if (!children.at(i).hidden)
 		{
-			interfaces::surface->DrawSetColor(colors::grey);
-			interfaces::surface->DrawFilledRect(x, offset, x + w, offset + h);
-			interfaces::surface->DrawSetColor(colors::black);
-			interfaces::surface->DrawOutlinedRect(x - 1, offset - 1, (x + w) + 1, (offset + h) + 1);
+			surface->DrawSetColor(colors::grey);
+			surface->DrawFilledRect(x, offset, x + w, offset + h);
+			surface->DrawSetColor(colors::black);
+			surface->DrawOutlinedRect(x - 1, offset - 1, (x + w) + 1, (offset + h) + 1);
 
-			interfaces::surface->DrawLine((x + (x + w)) / 2, offset, (x + (x + w)) / 2, offset + h);
+			surface->DrawLine((x + (x + w)) / 2, offset, (x + (x + w)) / 2, offset + h);
 
 			print_text(children.at(i).title, x + 10, offset + 5, colors::white);
 			print_text(children.at(i).option, ((x + (x + w)) / 2) + 10, offset + 5, colors::white);
