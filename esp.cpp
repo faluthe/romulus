@@ -1,20 +1,23 @@
 #include <string>
+#include <vector>
 
 #include "Color.h"
+#include "Config.h"
 #include "Entity.h"
 #include "helper.h"
-#include "infopanel.h" // For infofont
 #include "interfaces.h"
 #include "localplayer.h"
 #include "structs.h"
 #include "Vector.h"
+
+unsigned long espFont;
 
 RECT get_bbox(Entity* ent)
 {
 	RECT box{};
 	Vector top, bottom;
 
-	world_to_screen(ent->hitboxPos(0) + Vector{ 0, 0, 8 }, top);
+	world_to_screen(ent->hitboxPos(0) + Vector{ 0, 0, 8 }, top); // 0 = head
 	world_to_screen(ent->absOrigin() - Vector{ 0, 0, 8 }, bottom);
 
 	int mid{ static_cast<int>(bottom.y - top.y) };
@@ -57,7 +60,7 @@ void player_esp()
 		wchar_t name[128];
 
 		if (MultiByteToWideChar(CP_UTF8, 0, info.name, -1, name, 128))
-			print_text(name, box.right + 10, box.top, colors::white);
+			print_text(name, box.left, box.top - 15, colors::white, espFont);
 
 		// Health
 		const Color* health;
@@ -68,7 +71,14 @@ void player_esp()
 		else
 			health = &colors::red;
 
-		print_text(std::to_wstring(ent->health()), box.right + 10, box.top + 15, *health);
+		print_text(L"Health: " + std::to_wstring(ent->health()), box.right + 10, box.bottom, *health, espFont);
+
+		// Armor
+		print_text(L"Armor: " + std::to_wstring(ent->armor()), box.right + 10, box.bottom + 15, colors::blue, espFont);
+
+		// Active Weapon
+		if (const auto weapon{ ent->activeWeapon() })
+			print_text(weapon->weaponTypeStr(), box.right + 10, box.bottom + 30, colors::white, espFont);
 	}
 }
 
@@ -82,7 +92,7 @@ void grenade_esp()
 
 		if (!ent || !ent->isGrenade())
 			continue;
-
+		
 		RECT box{ get_bbox(ent) };
 
 		int x{ (box.right + box.left) / 2 };
@@ -95,33 +105,65 @@ void grenade_esp()
 			{
 				std::string name{ studioModel->szName };
 				if (name.find("fraggrenade") != std::string::npos)
-					print_text(L"Grenade", x, y, colors::red);
+					print_text(L"Grenade", x, y, colors::red, espFont);
 				else if (name.find("flashbang") != std::string::npos)
-				{
-					print_text(L"Flashbang", x, y, colors::yellow);
-					surface->DrawSetColor(colors::yellow);
-					surface->DrawLine(x, y + 20, x + 70, y + 20);
-					surface->DrawSetColor(colors::black);
-					surface->DrawOutlinedRect(x - 1, y + 19, x + 71, y + 22);
-				}
+					print_text(L"Flashbang", x, y, colors::yellow, espFont);
 			}
 			break;
 		case ClassId::DecoyProjectile:
-			print_text(L"Decoy", x, y, colors::blue);
-			surface->DrawSetColor(colors::blue);
-			surface->DrawLine(x, y + 20, x + 70, y + 20);
-			surface->DrawSetColor(colors::black);
-			surface->DrawOutlinedRect(x - 1, y + 19, x + 71, y + 22);
-			print_text(std::to_wstring(i), x, y + 40, colors::white);
+			print_text(L"Decoy", x, y, colors::blue, espFont);
 			break;
 		case ClassId::MolotovProjectile:
-			print_text(L"Fire", x, y, colors::orange);
+			print_text(L"Fire", x, y, colors::orange, espFont);
 			break;
 		case ClassId::SmokeProjectile:
-			print_text(L"Smoke", x, y, colors::white);
+			print_text(L"Smoke", x, y, colors::white, espFont);
 			break;
 		default:
 			break;
+		}
+	}
+}
+
+void bomb_esp()
+{
+	using namespace interfaces;
+
+	for (int i{ 1 }; i < entityList->GetMaxEntities(); i++)
+	{
+		const auto ent{ entityList->GetClientEntity(i) };
+
+		if (!ent || ent->dormant() || !(ent->isC4() || ent->isPlantedC4()))
+			continue;
+
+		if (ent->isC4())
+		{
+			if (ent->vecOrigin() == Vector{ 0, 0, 0 })
+				continue;
+
+			RECT box{ get_bbox(ent) };
+
+			int x{ (box.right + box.left) / 2 };
+			int y{ (box.bottom + box.top) / 2 };
+
+			print_text(L"Dropped Bomb", x, y, colors::white, espFont);
+		}
+		else if (ent->isPlantedC4())
+		{
+			RECT box{ get_bbox(ent) };
+
+			int x{ (box.right + box.left) / 2 };
+			int y{ (box.bottom + box.top) / 2 };
+
+			auto timeToDet{ *reinterpret_cast<float*>((uintptr_t)ent + netvars::c4Blow) };
+			auto timer{ timeToDet - globalVars->curtime };
+			auto timerStr{ std::to_wstring(timer) };
+			timerStr.erase(timerStr.begin() + timerStr.find(L'.') + 2, timerStr.end()); // One point of precision
+			if (timer >= 0.0f)
+			{
+				print_text(L"Planted Bomb", x, y, colors::white, espFont);
+				print_text(timerStr, x, y + 20, colors::white, espFont);
+			}
 		}
 	}
 }
@@ -131,6 +173,12 @@ void render_esp()
 	if (!localplayer)
 		return;
 
-	player_esp();
+	if (!espFont && !set_font(espFont, 13, 500))
+		return;
+
+	if (config::boxes || localplayer->health() == 0)
+		player_esp();
+
 	grenade_esp();
+	bomb_esp();
 }

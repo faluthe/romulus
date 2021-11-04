@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#include "CUserCmd.h"
 #include "Vector.h"
 
 struct model_t
@@ -110,4 +111,54 @@ struct player_info_t {
     bool ishltv;
     unsigned int customfiles[4];
     unsigned char filesdownloaded;
+};
+
+struct CGlobalVarsBase
+{
+    float     realtime;                     // 0x0000
+    int       framecount;                   // 0x0004
+    float     absoluteframetime;            // 0x0008
+    float     absoluteframestarttimestddev; // 0x000C
+    float     curtime;                      // 0x0010
+    float     frametime;                    // 0x0014
+    int       maxClients;                   // 0x0018
+    int       tickcount;                    // 0x001C
+    float     interval_per_tick;            // 0x0020
+    float     interpolation_amount;         // 0x0024
+    int       simTicksThisFrame;            // 0x0028
+    int       network_protocol;             // 0x002C
+    void* pSaveData;                    // 0x0030
+    bool      m_bClient;                    // 0x0031
+    bool      m_bRemoteClient;              // 0x0032
+
+    float serverTime(CUserCmd* cmd = nullptr);
+};
+
+class player_move_data {
+public:
+    bool    first_run_of_instructions : 1;
+    bool    game_code_moved_player : 1;
+    int     player_handle;
+    int     impulse_command;
+    Vector	view_angles;
+    Vector	abs_view_angles;
+    int     buttons;
+    int     old_buttons;
+    float   fw_move;
+    float   sd_move;
+    float   up_move;
+    float   max_speed;
+    float   client_max_speed;
+    Vector	velocity;
+    Vector	angles;
+    Vector	old_angles;
+    float   step_height;
+    Vector	wish_velocity;
+    Vector	jump_velocity;
+    Vector	constraint_center;
+    float   constraint_radius;
+    float   constraint_width;
+    float   constraint_speed_factor;
+    float   u0[5];
+    Vector	abs_origin;
 };

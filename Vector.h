@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <sstream>
 
 class Vector
@@ -163,6 +164,12 @@ public:
     float Length2D() const
     {
         return sqrt(x * x + y * y);
+    }
+    void clamp()
+    {
+        x = std::clamp(x, -89.0f, 89.0f);
+        y = std::clamp(std::remainder(y, 360.0f), -180.0f, 180.0f);
+        z = std::clamp(z, -50.0f, 50.0f);
     }
 
     Vector& operator=(const Vector& vOther)

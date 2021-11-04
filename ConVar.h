@@ -18,6 +18,11 @@ public:
 		return call_virtual_method<int(__thiscall*)(void*)>(this, CONVAR_GETVALUE)(this);
 	}
 
+	void SetString(const char* newValue)
+	{
+		return call_virtual_method<void(__thiscall*)(void*, const char*)>(this, 14)(this, newValue);
+	}
+
 	void SetFloat(float newValue)
 	{
 		return call_virtual_method<void(__thiscall*)(void*, float)>(this, CONVAR_SETFLOAT)(this, newValue);

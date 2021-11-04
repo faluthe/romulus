@@ -16,4 +16,6 @@ void Hook::hookFunc(unsigned short index, void* hkFunc, void** ogFunc)
 
 	if (MH_CreateHook((void*)addr, hkFunc, ogFunc) != MH_OK)
 		throw std::runtime_error(std::string("Hook failed at: " + addr));
+	if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
+		throw std::runtime_error(std::string("Hook failed at: " + addr));
 }

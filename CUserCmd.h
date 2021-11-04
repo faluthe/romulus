@@ -15,7 +15,8 @@ struct CUserCmd
 		IN_MOVELEFT = 1 << 9,
 		IN_MOVERIGHT = 1 << 10,
 		IN_ATTACK2 = 1 << 11,
-		IN_COUNT
+		IN_COUNT,
+		IN_BULLRUSH = (1 << 22),
 	};
 	void* vmt;
 	int commandNumber;
@@ -26,4 +27,11 @@ struct CUserCmd
 	float sidemove;
 	float upmove;
 	int buttons;
+	char impulse;
+	int weaponselect;
+	int weaponsubtype;
+	int randomseed;
+	short mousedx;
+	short mousedy;
+	bool predicted;
 };

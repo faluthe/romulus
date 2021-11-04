@@ -1,5 +1,6 @@
 #include <string>
 
+#include "backtrack.h"
 #include "Color.h"
 #include "Config.h"
 #include "Entity.h"
@@ -16,12 +17,12 @@ void init_material()
 	material->SetMaterialVarFlags(1 << 2, false);
 }
 
-void setup_material(const Color& col, bool ignoreZ = false, bool wireframe = false, float alpha = 255.0f)
+void setup_material(const Color& col, bool ignoreZ = false, bool wireframe = false)
 {
 	init_material();
 
 	material->ColorModulate(col.r / 255.0f, col.g / 255.0f, col.b / 255.0f);
-	material->AlphaModulate(alpha / 255.0f);
+	material->AlphaModulate(col.a / 255.0f);
 	material->SetMaterialVarFlags(1 << 15, ignoreZ);
 	material->SetMaterialVarFlags(1 << 28, wireframe);
 
@@ -37,20 +38,22 @@ void no_draw()
 	interfaces::mdlRender->ForcedMaterialOverride(material);
 }
 
-void breathing(const Color& col)
+void breathing(Color& col)
 {
-	static float alpha{ 255.0f };
+	static int alpha{ 255 };
 	static bool countup{ false };
-	if (!countup && alpha > 0.0f)
-		alpha -= 0.5f;
-	if (alpha <= 0.0f)
+	if (!countup && alpha > 0)
+		alpha -= 1;
+	if (alpha <= 0)
 		countup = true;
-	if (countup && alpha < 255.0f)
-		alpha += 0.5f;
-	if (alpha >= 255.0f)
+	if (countup && alpha < 255)
+		alpha += 1;
+	if (alpha >= 255)
 		countup = false;
 
-	setup_material(col, false, false, alpha);
+	col.a = alpha;
+
+	setup_material(col);
 }
 
 void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& state, const ModelRenderInfo_t& pInfo, void* pCustomBoneToWorld)
@@ -71,34 +74,56 @@ void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& stat
 
 		if (localplayer->team() != ent->team())
 		{
-			setup_material(config::enemyHidden, true);
-			hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
+			if (config::chamsIgnoreZ || localplayer->health() == 0)
+			{
+				setup_material(config::enemyHidden, true);
+				hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
+			}
+			
+			if (records[ent->index()].size() > 0)
+			{
+				for (int i{ 0 }; i < static_cast<int>(records[ent->index()].size()); i++)
+				{
+					if (!valid_tick(records[ent->index()][i].simTime) || records[ent->index()][i].matrix == nullptr)
+						continue;
+					Color tickCol{ config::backtrack };
+					if (ent->index() == backtrack::selectedTarget && i == backtrack::selectedIndex)
+						tickCol = config::selectedTick;
+					else
+						tickCol.g -= i * 3;
+					setup_material(tickCol);
+					hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, records[ent->index()][i].matrix);
+				}
+			}
 			setup_material(config::enemyVisible);
 		}
 		else
 			setup_material(config::friendlyVisible);
 	}
-	else if (config::handChams && strstr(mdl->name, "sleeve") != nullptr)
+	else if (config::handChams && (strstr(mdl->name, "sleeve") != nullptr))
 	{
 		if (activeWeapon && activeWeapon->isKnife())
 			no_draw();
 		else
 			setup_material(colors::orange, false, true);
 	}
-	else if (config::handChams && strstr(mdl->name, "arms") != nullptr)
+	else if (config::handChams && (strstr(mdl->name, "arms") != nullptr))
 	{
 		if (activeWeapon && activeWeapon->isKnife())
 			no_draw();
 		else
-			setup_material(colors::orange, false, false, 255.0f / 2.0f);
+			setup_material(colors::orange);
 	}
-	else if (config::weaponChams && strstr(mdl->name, "models/weapons/v_") != nullptr)
+	else if (config::weaponChams && (strstr(mdl->name, "models/weapons/v_") != nullptr))
 	{
 		if (localplayer->isScoped())
 			return;
 
 		if (activeWeapon && activeWeapon->isKnife())
-			breathing(colors::black);
+		{
+			static Color knifeColor{ colors::black };
+			breathing(knifeColor);
+		}
 		else
 			setup_material(colors::white);
 	}

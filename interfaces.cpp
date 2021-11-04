@@ -27,14 +27,21 @@ namespace interfaces
 
 		client = get_interface<IBaseClientDll>(clientDll, "VClient018");
 		clientMode = **(void***)((*(uintptr_t**)client)[0xA] + 0x5);
+		clientMode = **reinterpret_cast<void***>((*reinterpret_cast<uintptr_t**>(client))[0xA] + 0x5);
+		clientState = **reinterpret_cast<void***>(pattern_scan("engine.dll", "A1 ? ? ? ? 8B 80 ? ? ? ? C3") + 1);
 		cvar = get_interface<ICvar>(GetModuleHandleA("vstdlib.dll"), "VEngineCvar007");
 		engine = get_interface<IVEngineClient>(engineDll, "VEngineClient014");
 		entityList = get_interface<IClientEntityList>(clientDll, "VClientEntityList003");
 		engineTrace = get_interface<IEngineTrace>(engineDll, "EngineTraceClient004");
+		gameMovement = get_interface<PlayerGameMovement>(clientDll, "GameMovement001");
+		globalVars = **reinterpret_cast<CGlobalVarsBase***>((*reinterpret_cast<uintptr_t**>(client))[0xB] + 0xA);
 		matSys = get_interface<IMaterialSystem>(GetModuleHandleA("materialsystem.dll"), "VMaterialSystem080");
 		mdlInfo = get_interface<IVModelInfo>(engineDll, "VModelInfoClient004");
 		mdlRender = get_interface<IVModelRender>(engineDll, "VEngineModel016");
+		moveHelper = **reinterpret_cast<PlayerMoveHelper***>(pattern_scan("client.dll", "8B 0D ? ? ? ? 8B 46 08 68") + 2);
 		panel = get_interface<IPanel>(GetModuleHandleA("vgui2.dll"), "VGUI_Panel009");
+		playerPrediction = get_interface<PlayerPrediction>(clientDll, "VClientPrediction001");
+		studioRender = get_interface<IStudioRender>(GetModuleHandleA("studiorender.dll"), "VStudioRender026");
 		surface = get_interface<ISurface>(GetModuleHandleA("vguimatsurface.dll"), "VGUI_Surface031");
 	}
 }

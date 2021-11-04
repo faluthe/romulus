@@ -3,8 +3,6 @@
 #include "Entity.h"
 #include "helper.h"
 
-class Entity;
-
 class IClientEntityList
 {
 public:

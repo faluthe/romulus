@@ -25,6 +25,7 @@ public:
 	{
 	}
 	int add_child(std::wstring childTitle, std::wstring childOption = L"");
+	void temp_child(int& offset, std::wstring title, std::wstring option);
 	void hide(int index);
 	void display(int index, std::wstring displayOption);
 	void display(int index, int displayOption);

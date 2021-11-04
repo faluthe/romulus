@@ -2,7 +2,7 @@
 
 struct Color
 {
-	const int r, g, b, a;
+	int r, g, b, a;
 };
 
 namespace colors
@@ -15,4 +15,5 @@ namespace colors
 	constexpr Color green{ 0, 255, 0, 255 };
 	constexpr Color yellow{ 255, 255, 0, 255 };
 	constexpr Color red{ 255, 0, 0, 255 };
+	constexpr Color pink{ 255, 20, 147, 255 };
 }

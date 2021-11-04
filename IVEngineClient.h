@@ -1,6 +1,7 @@
 #pragma once
 
 #include "helper.h"
+#include "INetChannelInfo.h"
 #include "Matrix.h"
 
 struct player_info_t;
@@ -23,6 +24,11 @@ public:
 		return call_virtual_method<int(__thiscall*)(void*)>(this, ENGINE_GETLOCALENT)(this);
 	}
 
+	void GetViewAngles(Vector& angles)
+	{
+		return call_virtual_method<void(__thiscall*)(void*, Vector&)>(this, 18)(this, angles);
+	}
+
 	int GetMaxClients()
 	{
 		return call_virtual_method<int(__thiscall*)(void*)>(this, ENGINE_MAXCLIENTS)(this);
@@ -36,5 +42,10 @@ public:
 	ViewMatrix& WorldToScreenMatrix()
 	{
 		return call_virtual_method<ViewMatrix& (__thiscall*)(void*)>(this, ENGINE_W2SMATRIX)(this);
+	}
+
+	INetChannelInfo* GetNetChannelInfo()
+	{
+		return call_virtual_method<INetChannelInfo* (__thiscall*)(void*)>(this, ENGINE_NETCHANNEL)(this);
 	}
 };

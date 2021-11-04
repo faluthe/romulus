@@ -12,8 +12,10 @@ namespace convars
 		using namespace interfaces;
 		cvar->FindVar("cl_grenadepreview")->SetValue(1);
 		cvar->FindVar("mat_postprocess_enable")->SetValue(1);
-		cvar->FindVar("weapon_debug_spread_show")->SetValue(2);
-		cvar->FindVar("cl_crosshair_recoil")->SetValue(1);
+		cvar->FindVar("sv_skyname")->SetString("sky_lunacy");
+		cvar->FindVar("r_3dsky")->SetValue(0);
+		// cvar->FindVar("weapon_debug_spread_show")->SetValue(2);
+		// cvar->FindVar("cl_crosshair_recoil")->SetValue(1);
 	}
 
 	void restore()
@@ -21,8 +23,8 @@ namespace convars
 		using namespace interfaces;
 		cvar->FindVar("cl_grenadepreview")->SetValue(0);
 		cvar->FindVar("mat_postprocess_enable")->SetValue(0);
-		cvar->FindVar("weapon_debug_spread_show")->SetValue(0);
-		cvar->FindVar("cl_crosshair_recoil")->SetValue(0);
+		// cvar->FindVar("weapon_debug_spread_show")->SetValue(0);
+		// cvar->FindVar("cl_crosshair_recoil")->SetValue(0);
 
 		delete viewmodel_fov;
 		delete viewmodel_offset_x;

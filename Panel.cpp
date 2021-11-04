@@ -13,6 +13,23 @@ int DynamicPanel::add_child(std::wstring childTitle, std::wstring childOption)
 	return children.size() - 1;
 }
 
+void DynamicPanel::temp_child(int& offset, std::wstring childTitle, std::wstring childOption)
+{
+	using namespace interfaces;
+
+	offset += h;
+
+	surface->DrawSetColor(colors::grey);
+	surface->DrawFilledRect(x, y + offset, x + w, y + offset + h);
+	surface->DrawSetColor(colors::black);
+	surface->DrawOutlinedRect(x - 1, y + offset - 1, (x + w) + 1, y + (offset + h) + 1);
+
+	surface->DrawLine((x + (x + w)) / 2, y + offset, (x + (x + w)) / 2, y + offset + h);
+
+	print_text(childTitle, x + 10, y + offset + 5, colors::white, font);
+	print_text(childOption, ((x + (x + w)) / 2) + 10, y + offset + 5, colors::white, font);
+}
+
 void DynamicPanel::hide(int index)
 {
 	children.at(index).hidden = true;
@@ -41,6 +58,7 @@ void DynamicPanel::display(int index, float displayOption)
 void DynamicPanel::draw()
 {
 	using namespace interfaces;
+
 	surface->DrawSetColor(colors::grey);
 
 	surface->DrawFilledRect(x, y, x + w, y + h);
@@ -50,7 +68,7 @@ void DynamicPanel::draw()
 	int wide, tall;
 	surface->GetTextSize(font, title.c_str(), wide, tall);
 
-	print_text(title, ((x + (x + w)) / 2) - (wide / 2), y + h / 4, colors::white);
+	print_text(title, ((x + (x + w)) / 2) - (wide / 2), y + h / 4, colors::white, font);
 
 	for (size_t i{ 0 }, offset{ static_cast<size_t>(y + h) }; i < children.size(); i++)
 	{
@@ -63,8 +81,8 @@ void DynamicPanel::draw()
 
 			surface->DrawLine((x + (x + w)) / 2, offset, (x + (x + w)) / 2, offset + h);
 
-			print_text(children.at(i).title, x + 10, offset + 5, colors::white);
-			print_text(children.at(i).option, ((x + (x + w)) / 2) + 10, offset + 5, colors::white);
+			print_text(children.at(i).title, x + 10, offset + 5, colors::white, font);
+			print_text(children.at(i).option, ((x + (x + w)) / 2) + 10, offset + 5, colors::white, font);
 			
 			offset += h;
 		}

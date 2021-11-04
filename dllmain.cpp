@@ -2,7 +2,6 @@
 #include <stdexcept>
 #include <Windows.h>
 
-#include "convars.h"
 #include "hooks.h"
 #include "interfaces.h"
 #include "netvars.h"

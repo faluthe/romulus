@@ -47,12 +47,17 @@ namespace netvars
 		
 		activeWeapon = get_netvar("DT_CSPlayer", "m_hActiveWeapon");
 		aimPunch = get_netvar("DT_BasePlayer", "m_aimPunchAngle");
+		armor = get_netvar("DT_CSPlayer", "m_ArmorValue");
+		c4Blow = get_netvar("DT_PlantedC4", "m_flC4Blow");
 		flags = get_netvar("DT_CSPlayer", "m_fFlags");
 		health = get_netvar("DT_BasePlayer", "m_iHealth");
 		isScoped = get_netvar("DT_CSPlayer", "m_bIsScoped");
 		itemDefIndex = get_netvar("DT_BaseCombatWeapon", "m_iItemDefinitionIndex");
 		moveType = get_netvar("DT_CSPlayer", "m_nRenderMode") + 1;
 		nextPrimaryAttack = get_netvar("DT_BaseCombatWeapon", "m_flNextPrimaryAttack");
+		simulationTime = get_netvar("DT_CSPlayer", "m_flSimulationTime");
 		team = get_netvar("DT_BasePlayer", "m_iTeamNum");
+		tickBase = get_netvar("DT_CSPlayer", "m_nTickBase");
+		vecOrigin = get_netvar("DT_BasePlayer", "m_vecOrigin");
 	}
 }
