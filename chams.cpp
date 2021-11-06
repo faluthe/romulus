@@ -67,7 +67,7 @@ void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& stat
 
 	if (strstr(mdl->name, "models/player") != nullptr)
 	{
-		const auto ent{ interfaces::entityList->GetClientEntity(pInfo.entityIndex) };
+		const auto ent{ interfaces::entityList->GetClientEntity<PlayerEntity>(pInfo.entityIndex) };
 
 		if (!ent || ent->dormant() || !ent->isAlive())
 			return;
@@ -80,19 +80,21 @@ void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& stat
 				hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, pCustomBoneToWorld);
 			}
 			
-			if (records[ent->index()].size() > 0)
+			auto entIndex = ent->entityListIndex();
+
+			if (records[entIndex].size() > 0)
 			{
-				for (int i{ 0 }; i < static_cast<int>(records[ent->index()].size()); i++)
+				for (int i{ 0 }; i < static_cast<int>(records[entIndex].size()); i++)
 				{
-					if (!valid_tick(records[ent->index()][i].simTime) || records[ent->index()][i].matrix == nullptr)
+					if (!valid_tick(records[entIndex][i].simTime) || records[entIndex][i].matrix == nullptr)
 						continue;
 					Color tickCol{ config::backtrack };
-					if (ent->index() == backtrack::selectedTarget && i == backtrack::selectedIndex)
+					if (entIndex == backtrack::selectedTarget && i == backtrack::selectedIndex)
 						tickCol = config::selectedTick;
 					else
 						tickCol.g -= i * 3;
 					setup_material(tickCol);
-					hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, records[ent->index()][i].matrix);
+					hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, records[entIndex][i].matrix);
 				}
 			}
 			setup_material(config::enemyVisible);

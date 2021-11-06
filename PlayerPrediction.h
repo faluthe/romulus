@@ -8,13 +8,6 @@
 class PlayerPrediction
 {
 public:
-	void SetupMove(Entity* ent, CUserCmd* cmd, PlayerMoveHelper* helper, void* data)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, Entity*, CUserCmd*, PlayerMoveHelper*, void*)>(this, 20)(this, ent, cmd, helper, data);
-	}
-
-	void FinishMove(Entity* ent, CUserCmd* cmd, void* data)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, Entity*, CUserCmd*, void*)>(this, 21)(this, ent, cmd, data);
-	}
+	VIRTUAL_METHOD(void, SetupMove, 20, (Entity* ent, CUserCmd* cmd, PlayerMoveHelper* helper, void* data), (this, ent, cmd, helper, data))
+	VIRTUAL_METHOD(void, FinishMove, 21, (Entity* ent, CUserCmd* cmd, void* data), (this, ent, cmd, data))
 };

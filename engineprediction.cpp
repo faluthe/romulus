@@ -34,12 +34,12 @@ namespace prediction
 		globalVars->curtime = localplayer->tickBase() * globalVars->interval_per_tick;
 		globalVars->frametime = globalVars->interval_per_tick;
 
-		gameMovement->startTracking(localplayer);
+		gameMovement->StartTracking(localplayer);
 
 		memset(&data, 0, sizeof(data));
 		moveHelper->SetHost(localplayer);
 		playerPrediction->SetupMove(localplayer, cmd, moveHelper, &data);
-		gameMovement->processMovement(localplayer, &data);
+		gameMovement->ProcessMovement(localplayer, &data);
 		playerPrediction->FinishMove(localplayer, cmd, &data);
 	}
 
@@ -50,7 +50,7 @@ namespace prediction
 		if (!localplayer)
 			return;
 
-		gameMovement->finishTracking(localplayer);
+		gameMovement->FinishTracking(localplayer);
 		moveHelper->SetHost(nullptr);
 
 		*predictionRandomSeed = -1;
@@ -80,7 +80,7 @@ namespace prediction
 
 		interfaces::moveHelper->SetHost(localplayer);
 		interfaces::playerPrediction->SetupMove(localplayer, cmd, interfaces::moveHelper, moveData);
-		interfaces::gameMovement->processMovement(localplayer, moveData);
+		interfaces::gameMovement->ProcessMovement(localplayer, moveData);
 		interfaces::playerPrediction->FinishMove(localplayer, cmd, moveData);
 		interfaces::moveHelper->SetHost(nullptr);
 

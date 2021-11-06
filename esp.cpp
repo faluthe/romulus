@@ -37,7 +37,7 @@ void player_esp()
 
 	for (int i{ 1 }; i < engine->GetMaxClients(); i++)
 	{
-		const auto ent{ entityList->GetClientEntity(i) };
+		const auto ent{ entityList->GetClientEntity<PlayerEntity>(i) };
 
 		if (!ent || !ent->isAlive() || ent->dormant() || ent->team() == localplayer->team())
 			continue;
@@ -88,7 +88,7 @@ void grenade_esp()
 
 	for (int i{ 1 }; i < entityList->GetMaxEntities(); i++)
 	{
-		const auto ent{ entityList->GetClientEntity(i) };
+		const auto ent{ entityList->GetClientEntity<Entity>(i) };
 
 		if (!ent || !ent->isGrenade())
 			continue;
@@ -131,7 +131,7 @@ void bomb_esp()
 
 	for (int i{ 1 }; i < entityList->GetMaxEntities(); i++)
 	{
-		const auto ent{ entityList->GetClientEntity(i) };
+		const auto ent{ entityList->GetClientEntity<PlayerEntity>(i) };
 
 		if (!ent || ent->dormant() || !(ent->isC4() || ent->isPlantedC4()))
 			continue;

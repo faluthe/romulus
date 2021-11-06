@@ -5,10 +5,7 @@
 class INetChannelInfo
 {
 public:
-	float GetLatency(int flow)
-	{
-		return call_virtual_method<float(__thiscall*)(void*, int)>(this, NCI_LATENCY)(this, flow);
-	}
+	VIRTUAL_METHOD(float, GetLatency, 9, (int flow), (this, flow))
 
 	char pad0[44];
 	int chokedPackets;

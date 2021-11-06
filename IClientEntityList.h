@@ -6,13 +6,17 @@
 class IClientEntityList
 {
 public:
-	Entity* GetClientEntity(int entNum)
+	template<typename T>
+	T* GetClientEntity(int index)
 	{
-		return call_virtual_method<Entity* (__thiscall*)(void*, int)>(this, ENTLIST_GETENT)(this, entNum);
+		return call_virtual_method<T*, 3>(this, index);
 	}
 
-	int GetMaxEntities()
+	template<typename T>
+	T* GetEntityFromHandle(int handle)
 	{
-		return call_virtual_method<int(__thiscall*)(void*)>(this, ENTLIST_MAXENTS)(this);
+		return call_virtual_method<T*, 4>(this, handle);
 	}
+
+	VIRTUAL_METHOD(int, GetMaxEntities, 8, (), (this))
 };

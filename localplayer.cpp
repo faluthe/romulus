@@ -6,6 +6,6 @@ namespace localplayerUtils
 	void get()
 	{
 		using namespace interfaces;
-		localplayer = entityList->GetClientEntity(engine->GetLocalPlayer());
+		localplayer = entityList->GetClientEntity<LocalplayerEntity>(engine->GetLocalPlayer());
 	}
 }

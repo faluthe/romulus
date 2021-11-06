@@ -9,43 +9,13 @@ struct player_info_t;
 class IVEngineClient
 {
 public:
-	void GetScreenSize(int& width, int& height)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, int&, int&)>(this, ENGINE_GETSCREENSIZE)(this, width, height);
-	}
-
-	bool GetPlayerInfo(int entNum, player_info_t* info)
-	{
-		return call_virtual_method<bool(__thiscall*)(void*, int, player_info_t*)>(this, ENGINE_PLAYERINFO)(this, entNum, info);
-	}
-	
-	int GetLocalPlayer()
-	{
-		return call_virtual_method<int(__thiscall*)(void*)>(this, ENGINE_GETLOCALENT)(this);
-	}
-
-	void GetViewAngles(Vector& angles)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, Vector&)>(this, 18)(this, angles);
-	}
-
-	int GetMaxClients()
-	{
-		return call_virtual_method<int(__thiscall*)(void*)>(this, ENGINE_MAXCLIENTS)(this);
-	}
-
-	bool IsInGame()
-	{
-		return call_virtual_method<bool(__thiscall*)(void*)>(this, ENGINE_INGAME)(this);
-	}
-
-	ViewMatrix& WorldToScreenMatrix()
-	{
-		return call_virtual_method<ViewMatrix& (__thiscall*)(void*)>(this, ENGINE_W2SMATRIX)(this);
-	}
-
-	INetChannelInfo* GetNetChannelInfo()
-	{
-		return call_virtual_method<INetChannelInfo* (__thiscall*)(void*)>(this, ENGINE_NETCHANNEL)(this);
-	}
+	VIRTUAL_METHOD(void, GetScreenSize, 5, (int& width, int& height), (this, std::ref(width), std::ref(height)))
+	VIRTUAL_METHOD(bool, GetPlayerInfo, 8, (int entIndex, player_info_t* pInfo), (this, entIndex, pInfo))
+	VIRTUAL_METHOD(int, GetLocalPlayer, 12, (), (this))
+	VIRTUAL_METHOD(void, GetViewAngles, 18, (Vector& angles), (this, angles))
+	VIRTUAL_METHOD(void, SetViewAngles, 19, (const Vector& angle), (this, std::ref(angle)))
+	VIRTUAL_METHOD(int, GetMaxClients, 20, (), (this))
+	VIRTUAL_METHOD(bool, IsInGame, 26, (), (this))
+	VIRTUAL_METHOD(ViewMatrix&, WorldToScreenMatrix, 37, (), (this))
+	VIRTUAL_METHOD(INetChannelInfo*, GetNetChannelInfo, 78, (), (this))
 };

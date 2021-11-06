@@ -66,8 +66,5 @@ public:
 class IBaseClientDll
 {
 public:
-	ClientClass* GetAllClasses()
-	{
-		return call_virtual_method<ClientClass* (__thiscall*)(void*)>(this, BASECLIENT_GETALL)(this);
-	}
+	VIRTUAL_METHOD(ClientClass*, GetAllClasses, 8, (), (this))
 };

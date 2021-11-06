@@ -38,8 +38,5 @@
 class PlayerMoveHelper
 {
 public:
-	void SetHost(Entity* host)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, Entity*)>(this, 1)(this, host);
-	}
+	VIRTUAL_METHOD(void, SetHost, 1, (Entity* host), (this, host))
 };

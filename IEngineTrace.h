@@ -6,11 +6,8 @@ struct Ray_t;
 struct traceFilter;
 struct trace_t;
 
-class IEngineTrace
-{
-public:
-	void TraceRay(Ray_t& ray, unsigned int fMask, traceFilter* pTraceFilter, trace_t* pTrace)
-	{
-		call_virtual_method<void(__thiscall*)(void*, Ray_t&, unsigned int, traceFilter*, trace_t*)>(this, ENGINETRACE_TRACERAY)(this, ray, fMask, pTraceFilter, pTrace);
-	}
-};
+class IEngineTrace;
+//{
+//public:
+//	VIRTUAL_METHOD(void, TraceRay, 5, (Ray_t& ray, unsigned int fMask, traceFilter* pTraceFilter, trace_t* pTrace), (this, ray, fMask, pTraceFilter, pTrace))
+//};

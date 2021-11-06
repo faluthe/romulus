@@ -94,6 +94,9 @@ void __stdcall hkFrameStageNotify(client_frame_stage_t frameStage)
 		for (auto index = 0; index < szVarMap; index++)
 			*(uintptr_t*)((*(uintptr_t*)varMap) + index * 12) = flag;
 	};
+
+	// skinchanger(frameStage);
+
 	switch (frameStage)
 	{
 	case client_frame_stage_t::FRAME_NET_UPDATE_END:
@@ -101,7 +104,7 @@ void __stdcall hkFrameStageNotify(client_frame_stage_t frameStage)
 		{
 			for (int i = 1; i <= interfaces::engine->GetMaxClients(); i++)
 			{
-				const auto ent{ interfaces::entityList->GetClientEntity(i) };
+				const auto ent{ interfaces::entityList->GetClientEntity<PlayerEntity>(i) };
 				if (!ent || ent->team() == localplayer->team() || ent->dormant())
 					continue;
 				setInterpolationFlags(ent, 0);

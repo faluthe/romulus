@@ -6,28 +6,9 @@
 class IMaterialSystem
 {
 public:
-	IMaterial* FindMaterial(const char* matName, const char* textureGroupName)
-	{
-		return call_virtual_method<IMaterial* (__thiscall*)(void*, const char*, const char*, bool, const char*)>(this, IMATSYS_FINDMAT)(this, matName, textureGroupName, true, NULL);
-	}
-
-	short firstMat()
-	{
-		return call_virtual_method<short(__thiscall*)(void*)>(this, 86)(this);
-	}
-
-	short nextMat(short handle)
-	{
-		return call_virtual_method<short(__thiscall*)(void*, short)>(this, 87)(this, handle);
-	}
-
-	short invalidMat()
-	{
-		return call_virtual_method<short(__thiscall*)(void*)>(this, 88)(this);
-	}
-
-	IMaterial* GetMaterial(short handle)
-	{
-		return call_virtual_method<IMaterial* (__thiscall*)(void*, short)>(this, 89)(this, handle);
-	}
+	VIRTUAL_METHOD(IMaterial*, FindMaterial, 84, (const char* materialName, const char* textureGroupName), (this, materialName, textureGroupName, true, NULL))
+	VIRTUAL_METHOD(short, FirstMaterial, 86, (), (this))
+	VIRTUAL_METHOD(short, NextMaterial, 87, (short handle), (this, handle))
+	VIRTUAL_METHOD(short, InvalidMaterial, 88, (), (this))
+	VIRTUAL_METHOD(IMaterial*, GetMaterial, 89, (short handle), (this, handle))
 };

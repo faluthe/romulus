@@ -7,18 +7,7 @@
 class PlayerGameMovement
 {
 public:
-	void processMovement(Entity* ent, player_move_data* move)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, Entity*, player_move_data*)>(this, 1)(this, ent, move);
-	}
-
-	void startTracking(Entity* ent)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, Entity*)>(this, 3)(this, ent);
-	}
-
-	void finishTracking(Entity* ent)
-	{
-		return call_virtual_method<void(__thiscall*)(void*, Entity*)>(this, 4)(this, ent);
-	}
+	VIRTUAL_METHOD(void, ProcessMovement, 1, (Entity* ent, player_move_data* move), (this, ent, move))
+	VIRTUAL_METHOD(void, StartTracking, 3, (Entity* ent), (this, ent))
+	VIRTUAL_METHOD(void, FinishTracking, 4, (Entity* ent), (this, ent))
 };

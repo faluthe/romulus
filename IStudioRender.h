@@ -25,6 +25,6 @@ public:
 	{
         if (!materialOverride)
             return overrideType == OverrideType::DepthWrite || overrideType == OverrideType::SsaoDepthWrite;
-        return std::string_view{ materialOverride->name() }.starts_with("dev/glow");
+        return std::string_view{ materialOverride->GetName() }.starts_with("dev/glow");
 	}
 };

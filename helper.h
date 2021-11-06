@@ -95,11 +95,16 @@
 #define MDLRENDER_FORCEMATOVERIDE 1
 #define MDLRENDER_ISFORCEDMAT 2
 
-template<typename ReturnType>
-ReturnType call_virtual_method(void* pInterface, unsigned int index)
+template<typename ReturnType, int index, typename ...Arguments>
+constexpr ReturnType call_virtual_method(void* pInterface, Arguments... arguments)
 {
-    unsigned int* pVTable{ *reinterpret_cast<unsigned int**>(pInterface) };
-    return reinterpret_cast<ReturnType>(pVTable[index]);
+	return (*reinterpret_cast<ReturnType (__thiscall***)(void*, Arguments...)>(pInterface))[index](pInterface, arguments...);
+}
+
+#define VIRTUAL_METHOD(type, functionName, index, functionArgs, realArgs) \
+type functionName functionArgs \
+{ \
+	return call_virtual_method<type, index>realArgs; \
 }
 
 bool set_font(unsigned long& font, int size, int weight = 550);

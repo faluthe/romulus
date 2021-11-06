@@ -7,4 +7,4 @@ namespace localplayerUtils
 	void get();
 }
 
-inline Entity* localplayer;
+inline LocalplayerEntity* localplayer;

@@ -5,8 +5,5 @@
 class IPanel
 {
 public:
-    const char* GetName(unsigned int panelId)
-    {
-        return call_virtual_method<const char* (__thiscall*)(void*, unsigned int)>(this, PANEL_GETNAME)(this, panelId);
-    }
+    VIRTUAL_METHOD(const char*, GetName, 36, (unsigned int id), (this, id))
 };

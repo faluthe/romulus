@@ -6,11 +6,14 @@
 #include "netvars.h"
 
 class ClientClass;
+struct CUserCmd;
 class Matrix;
 struct model_t;
+class WeaponEntity;
 class Vector;
 
-enum class ObsMode {
+enum class OBSMode 
+{
 	None = 0,
 	Deathcam,
 	Freezecam,
@@ -20,172 +23,96 @@ enum class ObsMode {
 	Roaming
 };
 
-class WeaponEntity
+enum class Team
 {
-public:
-	void* networkable()
-	{
-		return reinterpret_cast<void*>(this + 0x8);
-	}
-
-	int weaponType()
-	{
-		return call_virtual_method<int(__thiscall*)(void*)>(this, WEAPONENTITY_WEAPON_TYPE)(this);
-	}
-
-	int itemDefinitionIndex()
-	{
-		return *reinterpret_cast<int*>(this + netvars::itemDefIndex);
-	}
-
-	ClientClass* clientClass()
-	{
-		return call_virtual_method<ClientClass* (__thiscall*)(void*)>(networkable(), ENTITY_CLIENTCLASS)(networkable());
-	}
-
-	bool isKnife() { return weaponType() == 0; }
-	bool isPistol() { return weaponType() == 1; }
-	bool isRevolver() { return (itemDefinitionIndex() == 64 || itemDefinitionIndex() == 262208); }
-
-	std::wstring weaponTypeStr();
+	T = 2,
+	CT = 3
 };
 
 class Entity
 {
 public:
-	void* animating()
-	{
-		return reinterpret_cast<void*>(this + 0x4);
-	}
+	void* animating() { return reinterpret_cast<void*>(this + 0x4); }
+	void* networkable() { return reinterpret_cast<void*>(this + 0x8); }
 
-	void* networkable()
-	{
-		return reinterpret_cast<void*>(this + 0x8);
-	}
+	VIRTUAL_METHOD(ClientClass*, clientClass, 2, (), (networkable()))
+	VIRTUAL_METHOD(model_t*, model, 8, (), (animating()))
+	VIRTUAL_METHOD(Vector&, absOrigin, 10, (), (this))
+	VIRTUAL_METHOD(bool, setupBones, 13, (Matrix* out, int maximum, int mask, float time), (animating(), out, maximum, mask, time))
 
-	model_t* model()
-	{
-		return call_virtual_method<model_t* (__thiscall*)(void*)>(animating(), ENTITY_MODEL)(animating());
-	}
+	NETVAR(int, modelIndex, "DT_BaseViewModel", "m_nModelIndex")
 
-	int health()
-	{
-		return *reinterpret_cast<int*>(this + netvars::health);
-	}
+	Vector hitboxPos(int id);
+	bool isGrenade();
+	bool isC4();
+	bool isPlantedC4();
+};
 
-	int armor()
-	{
-		return *reinterpret_cast<int*>(this + netvars::armor);
-	}
+class PlayerEntity : public Entity
+{
+public:
+	VIRTUAL_METHOD(bool, isPlayer, 158, (), (this))
+	VIRTUAL_METHOD(int, entityListIndex, 10, (), (networkable()))
+	VIRTUAL_METHOD(OBSMode, observerMode, 294, (), (this))
+	VIRTUAL_METHOD(Entity*, observerTarget, 295, (), (this))
 
-	int flags()
-	{
-		return *reinterpret_cast<int*>(this + netvars::flags);
-	}
+	NETVAR(int, health, "DT_BasePlayer", "m_iHealth")
+	NETVAR(int, armor, "DT_CSPlayer", "m_ArmorValue")
+	NETVAR(int, flags, "DT_CSPlayer", "m_fFlags")
+	NETVAR(Team, team, "DT_BasePlayer", "m_iTeamNum")
+	NETVAR(bool, isScoped, "DT_CSPlayer", "m_bIsScoped")
+	NETVAR(float, simulationTime, "DT_CSPlayer", "m_flSimulationTime")
+	NETVAR(int, tickBase, "DT_CSPlayer", "m_nTickBase")
+	NETVAR(bool, gunGameImmunity, "DT_CSPlayer", "m_bGunGameImmunity")
+	NETVAR(Vector, vecOrigin, "DT_BasePlayer", "m_vecOrigin")
 
-	int moveType()
-	{
-		return *reinterpret_cast<int*>(this + netvars::moveType);
-	}
-
-	unsigned char dormant()
-	{
-		return *reinterpret_cast<unsigned char*>(this + 0xED);
-	}
-
-	int team()
-	{
-		return *reinterpret_cast<int*>(this + netvars::team);
-	}
-
-	bool isScoped()
-	{
-		return *reinterpret_cast<bool*>(this + netvars::isScoped);
-	}
-
-	float nextPrimaryAttack()
-	{
-		return *reinterpret_cast<float*>(this + netvars::nextPrimaryAttack);
-	}
-
-	float simulationTime()
-	{
-		return *reinterpret_cast<float*>(this + netvars::simulationTime);
-	}
-
-	int tickBase()
-	{
-		return *reinterpret_cast<int*>(this + netvars::tickBase);
-	}
-
-	bool isAlive()
-	{
-		return (health() > 0);
-	}
-
-	Vector& absOrigin()
-	{
-		return call_virtual_method<Vector& (__thiscall*)(void*)>(this, ENTITY_ABSORIGIN)(this);
-	}
-
-	Vector vecOrigin()
-	{
-		return *reinterpret_cast<Vector*>(this + netvars::vecOrigin);
-	}
-
+	bool isAlive() { return (health() > 0); }
+	void invalidateBoneCache();
+	WeaponEntity* activeWeapon();
+	
+	int moveType() { return *reinterpret_cast<int*>(this + netvars::moveType); } // REDO
+	unsigned char dormant() { return *reinterpret_cast<unsigned char*>(this + 0xED); }
 	Vector eyePosition()
 	{
 		Vector v;
-		call_virtual_method<void(__thiscall*)(void*, Vector&)>(this, ENTITY_EYEPOS)(this, v);
+		call_virtual_method<void, 285>(this, std::ref(v));
 		return v;
 	}
+};
 
-	Vector aimPunch()
-	{
-		/*Vector v;
-		call_virtual_method<void(__thiscall*)(void*, Vector&)>(this, ENTITY_AIMPUNCH)(this, v);
-		return v;*/
-		return *reinterpret_cast<Vector*>(this + netvars::aimPunch);
-	}
+class LocalplayerEntity : public PlayerEntity
+{
+public:
+	NETVAR(unsigned int*, weapons, "DT_CSPlayer", "m_hMyWeapons")
+	NETVAR(Vector, aimPunch, "DT_BasePlayer", "m_aimPunchAngle")
+	NETVAR(int, viewmodel, "DT_BasePlayer", "m_hViewModel[0]")
+	void aimAt(Vector pos, CUserCmd* cmd, bool silent = true);
+};
 
-	bool isPlayer()
-	{
-		return call_virtual_method<bool(__thiscall*)(void*)>(this, ENTITY_ISPLAYER)(this);
-	}
+class WeaponEntity : public Entity
+{
+public:
+	VIRTUAL_METHOD(int, weaponType, 455, (), (this))
 
-	ClientClass* clientClass()
-	{
-		return call_virtual_method<ClientClass* (__thiscall*)(void*)>(networkable(), ENTITY_CLIENTCLASS)(networkable());
-	}
+	NETVAR(int, itemDefIndex, "DT_BaseCombatWeapon", "m_iItemDefinitionIndex")
+	NETVAR(int, paintKit, "DT_BaseAttributableItem", "m_nFallbackPaintKit")
+	NETVAR(int, quality, "DT_BaseAttributableItem", "m_iEntityQuality")
+	NETVAR(float, wear, "DT_BaseAttributableItem", "m_flFallbackWear")
+	NETVAR(int, ogOwnerLow, "DT_BaseAttributableItem", "m_OriginalOwnerXuidLow")
+	NETVAR(int, ogOwnerHigh, "DT_BaseAttributableItem", "m_OriginalOwnerXuidHigh")
+	NETVAR(int, fallbackSeed, "DT_BaseAttributableItem", "m_nFallbackSeed")
+	NETVAR(int, itemId, "DT_BaseAttributableItem", "m_iItemIDHigh")
+	NETVAR(int, hWorldModel, "DT_BaseCombatWeapon", "m_hWeaponWorldModel")
+	
+	bool isKnife() { return weaponType() == 0; }
+	bool isPistol() { return weaponType() == 1; }
+	bool isRevolver() { return (itemDefIndex() == 64 || itemDefIndex() == 262208); }
 
-	int index()
-	{
-		return call_virtual_method<int(__thiscall*)(void*)>(networkable(), 10)(networkable());
-	}
+	std::wstring weaponTypeStr();
+};
 
-	bool setupBones(Matrix* out, int max, int mask, float time)
-	{
-		return call_virtual_method<bool(__thiscall*)(void*, Matrix*, int, int, float)>(animating(), ENTITY_SETUPBONES)(animating(), out, max, mask, time);
-	}
-
-	ObsMode observerMode()
-	{
-		return call_virtual_method<ObsMode(__thiscall*)(void*)>(this, ENTITY_OBSMODE)(this);
-	}
-
-	Entity* observerTarget()
-	{
-		return call_virtual_method<Entity* (__thiscall*)(void*)>(this, ENTITY_OBSTARGET)(this);
-	}
-
-	void invalidateBoneCache();
-
-	WeaponEntity* activeWeapon();
-
-	Vector hitboxPos(int id);
-
-	bool isGrenade();
-
-	bool isC4();
-	bool isPlantedC4();
+class ViewmodelEntity : public Entity
+{
+public:
+	NETVAR(int, hWeapon, "DT_BaseViewModel", "m_hWeapon")
 };

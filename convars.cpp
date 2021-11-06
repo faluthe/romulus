@@ -10,10 +10,10 @@ namespace convars
 	void set()
 	{
 		using namespace interfaces;
-		cvar->FindVar("cl_grenadepreview")->SetValue(1);
-		cvar->FindVar("mat_postprocess_enable")->SetValue(1);
+		cvar->FindVar("cl_grenadepreview")->SetInt(1);
+		cvar->FindVar("mat_postprocess_enable")->SetInt(1);
 		cvar->FindVar("sv_skyname")->SetString("sky_lunacy");
-		cvar->FindVar("r_3dsky")->SetValue(0);
+		cvar->FindVar("r_3dsky")->SetInt(0);
 		// cvar->FindVar("weapon_debug_spread_show")->SetValue(2);
 		// cvar->FindVar("cl_crosshair_recoil")->SetValue(1);
 	}
@@ -21,8 +21,8 @@ namespace convars
 	void restore()
 	{
 		using namespace interfaces;
-		cvar->FindVar("cl_grenadepreview")->SetValue(0);
-		cvar->FindVar("mat_postprocess_enable")->SetValue(0);
+		cvar->FindVar("cl_grenadepreview")->SetInt(0);
+		cvar->FindVar("mat_postprocess_enable")->SetInt(0);
 		// cvar->FindVar("weapon_debug_spread_show")->SetValue(0);
 		// cvar->FindVar("cl_crosshair_recoil")->SetValue(0);
 

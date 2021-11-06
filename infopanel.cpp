@@ -39,21 +39,21 @@ void debugpanel()
 		if (const auto weapon{ localplayer->activeWeapon() })
 		{
 			debug.display(weaponType, weapontype_to_wstring(weapon->weaponType()));
-			debug.display(defIndex, weapon->itemDefinitionIndex());
+			debug.display(defIndex, weapon->itemDefIndex());
 			debug.display(weaponClassId, weapon->weaponTypeStr());
 		}
 		
 		int players{};
 		for (int i{ 1 }; i < interfaces::engine->GetMaxClients(); i++)
 		{
-			if (interfaces::entityList->GetClientEntity(i))
+			if (interfaces::entityList->GetClientEntity<Entity>(i))
 				players++;
 		}
 
 		int ents{};
 		for (int i{ 1 }; i < interfaces::entityList->GetMaxEntities(); i++)
 		{
-			if (interfaces::entityList->GetClientEntity(i))
+			if (interfaces::entityList->GetClientEntity<Entity>(i))
 				ents++;
 		}
 
@@ -95,7 +95,7 @@ void spectator_list()
 
 	for (int i{ 1 }; i < engine->GetMaxClients(); i++)
 	{
-		const auto ent{ entityList->GetClientEntity(i) };
+		const auto ent{ entityList->GetClientEntity<PlayerEntity>(i) };
 
 		if (!ent || ent->dormant() || ent->isAlive() || ent->observerTarget() != player || ent == localplayer)
 			continue;
@@ -116,13 +116,13 @@ void spectator_list()
 			std::wstring modeWstr{};
 			switch (ent->observerMode())
 			{
-			case ObsMode::InEye: modeWstr = L"Firstperson"; break;
-			case ObsMode::Chase: modeWstr = L"Chase"; break;
-			case ObsMode::Deathcam: modeWstr = L"Deathcam"; break;
-			case ObsMode::Fixed: modeWstr = L"Fixed"; break;
-			case ObsMode::Freezecam: modeWstr = L"Freezecam"; break;
-			case ObsMode::None: modeWstr = L"None"; break;
-			case ObsMode::Roaming: modeWstr = L"Roaming"; break;
+			case OBSMode::InEye: modeWstr = L"Firstperson"; break;
+			case OBSMode::Chase: modeWstr = L"Chase"; break;
+			case OBSMode::Deathcam: modeWstr = L"Deathcam"; break;
+			case OBSMode::Fixed: modeWstr = L"Fixed"; break;
+			case OBSMode::Freezecam: modeWstr = L"Freezecam"; break;
+			case OBSMode::None: modeWstr = L"None"; break;
+			case OBSMode::Roaming: modeWstr = L"Roaming"; break;
 			default: modeWstr = L"Other";
 			}
 
