@@ -1,5 +1,7 @@
 #pragma once
 
+#include "hooks.h"
+
 struct CUserCmd;
 struct ModelRenderInfo_t;
 
@@ -9,3 +11,4 @@ void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& stat
 void external_xhair();
 void infopanel();
 void render_esp();
+void skinchanger(client_frame_stage_t stage);
