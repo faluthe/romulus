@@ -27,5 +27,7 @@ namespace config
 	inline bool boxes{ false };
 	inline bool chamsIgnoreZ{ false };
 
+	inline bool silentAim{ true };
+
 	void display();
 }

@@ -2,6 +2,7 @@
 #include <deque>
 
 #include "backtrack.h"
+#include "config.h"
 #include "ConVar.h"
 #include "CUserCmd.h"
 #include "INetChannelInfo.h"
@@ -88,7 +89,7 @@ namespace backtrack
 
 		for (int i{ 1 }; i <= engine->GetMaxClients(); i++)
 		{
-			const auto ent{ entityList->GetClientEntity(i) };
+			const auto ent{ entityList->GetClientEntity<PlayerEntity>(i) };
 			
 			if (!ent || ent == localplayer || ent->dormant() || !ent->isAlive() || ent->team() == localplayer->team())
 			{
@@ -132,7 +133,7 @@ namespace backtrack
 		float bestFov{ 255.0f };
 		float bestDistance{ FLT_MAX };
 
-		Entity* bestTarget{};
+		PlayerEntity* bestTarget{};
 		Vector bestTargetHeadPos{};
 		int bestTargetIndex{};
 		int bestRecord{};
@@ -140,7 +141,7 @@ namespace backtrack
 
 		for (int i{ 1 }; i < interfaces::engine->GetMaxClients(); i++)
 		{
-			const auto ent{ interfaces::entityList->GetClientEntity(i) };
+			const auto ent{ interfaces::entityList->GetClientEntity<PlayerEntity>(i) };
 
 			if (!ent || !ent->isAlive() || ent->dormant() || ent->team() == localplayer->team())
 				continue;
@@ -163,6 +164,15 @@ namespace backtrack
 				bestTargetHeadPos = headPos;
 			}
 		}
+		
+		if (bestTarget && !bestTarget->gunGameImmunity() && bestFov <= 50 && GetAsyncKeyState(VK_XBUTTON2) >> 15)
+		{
+			if (localplayer->activeWeapon()->weaponType() == 5)
+				localplayer->aimAt(bestTarget->hitboxPos(6), cmd); // lol
+			else
+				localplayer->aimAt(bestTarget->hitboxPos(0), cmd, config::silentAim);
+		}
+
 		Vector angle;
 		if (bestTarget)
 		{

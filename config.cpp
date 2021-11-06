@@ -33,10 +33,14 @@ namespace config
 
 		static int optionBoxes{ configPanel.add_child(L"Boxes") };
 		static int optionChams{ configPanel.add_child(L"Chams") };
+		static int optionSilentAim{ configPanel.add_child(L"Silent Aim") };
+
 		static int optionDebug{ configPanel.add_child(L"Debug") };
 
 		option(configPanel, optionBoxes, boxes, VK_NUMPAD2, L"ALWAYS", L"Dead Only");
 		option(configPanel, optionChams, chamsIgnoreZ, VK_NUMPAD3, L"IGNOREZ", L"Normal");
+		option(configPanel, optionSilentAim, silentAim, VK_NUMPAD4, L"ON", L"OFF");
+
 		option(configPanel, optionDebug, drawDebugPanel, VK_DELETE, L"ON", L"OFF");
 
 		if (drawConfigPanel)
