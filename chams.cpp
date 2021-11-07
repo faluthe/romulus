@@ -88,12 +88,9 @@ void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& stat
 				{
 					if (!valid_tick(records[entIndex][i].simTime) || records[entIndex][i].matrix == nullptr)
 						continue;
-					Color tickCol{ config::backtrack };
-					if (entIndex == backtrack::selectedTarget && i == backtrack::selectedIndex)
-						tickCol = config::selectedTick;
-					else
-						tickCol.g -= i * 3;
-					setup_material(tickCol);
+					if (entIndex != backtrack::selectedTarget || i != backtrack::selectedIndex)
+						continue;
+					setup_material(config::backtrack);
 					hooks::oDrawModelExecute(_this, _edx, context, state, pInfo, records[entIndex][i].matrix);
 				}
 			}

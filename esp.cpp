@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 
+#include "backtrack.h"
 #include "Color.h"
 #include "Config.h"
 #include "Entity.h"
@@ -39,7 +40,7 @@ void player_esp()
 	{
 		const auto ent{ entityList->GetClientEntity<PlayerEntity>(i) };
 
-		if (!ent || !ent->isAlive() || ent->dormant() || ent->team() == localplayer->team())
+		if (!ent || !ent->isAlive() || ent->dormant() || ent->team() == localplayer->team() || (localplayer->observerTarget() == ent && localplayer->observerMode() == OBSMode::InEye))
 			continue;
 
 		RECT box{ get_bbox(ent) };
@@ -79,6 +80,10 @@ void player_esp()
 		// Active Weapon
 		if (const auto weapon{ ent->activeWeapon() })
 			print_text(weapon->weaponTypeStr(), box.right + 10, box.bottom + 30, colors::white, espFont);
+
+		// Bomb carrier
+		if (ent->isBombCarrier())
+			print_text(L"Bomb", box.right + 10, box.bottom + 45, colors::yellow, espFont);
 	}
 }
 
@@ -131,7 +136,7 @@ void bomb_esp()
 
 	for (int i{ 1 }; i < entityList->GetMaxEntities(); i++)
 	{
-		const auto ent{ entityList->GetClientEntity<PlayerEntity>(i) };
+		const auto ent{ entityList->GetClientEntity<Entity>(i) };
 
 		if (!ent || ent->dormant() || !(ent->isC4() || ent->isPlantedC4()))
 			continue;
@@ -148,7 +153,7 @@ void bomb_esp()
 
 			print_text(L"Dropped Bomb", x, y, colors::white, espFont);
 		}
-		else if (ent->isPlantedC4())
+		else if (ent->isPlantedC4() && !ent->isDefused())
 		{
 			RECT box{ get_bbox(ent) };
 
@@ -162,8 +167,40 @@ void bomb_esp()
 			if (timer >= 0.0f)
 			{
 				print_text(L"Planted Bomb", x, y, colors::white, espFont);
-				print_text(timerStr, x, y + 20, colors::white, espFont);
+				print_text(timerStr, x, y + 15, colors::white, espFont);
+				if (timer >= 10.0f)
+					print_text(L"Can Defuse", x, y + 30, colors::green, espFont);
+				else if (timer >= 5.0f)
+					print_text(L"Can Defuse With Kit", x, y + 30, colors::yellow, espFont);
+				else
+					print_text(L"Cannot Defuse", x, y + 30, colors::red, espFont);
 			}
+		}
+	}
+}
+
+void backtrack_ticks()
+{
+	using namespace interfaces;
+
+	for (int i = 1; i < engine->GetMaxClients(); i++)
+	{
+		const auto ent = entityList->GetClientEntity<PlayerEntity>(i);
+
+		if (!ent || !ent->isAlive() || ent->dormant() || ent->team() == localplayer->team() || !ent->isVisible())
+			continue;
+
+		auto entRecords = records[ent->entityListIndex()];
+
+		for (size_t k = 0; k < entRecords.size(); k++)
+		{
+			if (!valid_tick(entRecords[k].simTime) || entRecords[k].matrix == nullptr)
+				continue;
+			
+			Vector pos;
+			world_to_screen(entRecords[k].head, pos);
+			surface->DrawSetColor(colors::white);
+			surface->DrawFilledRect(pos.x, pos.y, pos.x + 1, pos.y + 1);
 		}
 	}
 }
@@ -181,4 +218,5 @@ void render_esp()
 
 	grenade_esp();
 	bomb_esp();
+	backtrack_ticks();
 }
