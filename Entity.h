@@ -41,11 +41,14 @@ public:
 	VIRTUAL_METHOD(bool, setupBones, 13, (Matrix* out, int maximum, int mask, float time), (animating(), out, maximum, mask, time))
 
 	NETVAR(int, modelIndex, "DT_BaseViewModel", "m_nModelIndex")
+	NETVAR(Vector, vecOrigin, "DT_BasePlayer", "m_vecOrigin")
+	NETVAR(bool, isDefused, "DT_PlantedC4", "m_bBombDefused")
 
 	Vector hitboxPos(int id);
 	bool isGrenade();
 	bool isC4();
 	bool isPlantedC4();
+	unsigned char dormant() { return *reinterpret_cast<unsigned char*>(this + 0xED); }
 };
 
 class PlayerEntity : public Entity
@@ -64,19 +67,23 @@ public:
 	NETVAR(float, simulationTime, "DT_CSPlayer", "m_flSimulationTime")
 	NETVAR(int, tickBase, "DT_CSPlayer", "m_nTickBase")
 	NETVAR(bool, gunGameImmunity, "DT_CSPlayer", "m_bGunGameImmunity")
-	NETVAR(Vector, vecOrigin, "DT_BasePlayer", "m_vecOrigin")
 
 	bool isAlive() { return (health() > 0); }
+	bool isVisible();
 	void invalidateBoneCache();
 	WeaponEntity* activeWeapon();
 	
 	int moveType() { return *reinterpret_cast<int*>(this + netvars::moveType); } // REDO
-	unsigned char dormant() { return *reinterpret_cast<unsigned char*>(this + 0xED); }
 	Vector eyePosition()
 	{
 		Vector v;
 		call_virtual_method<void, 285>(this, std::ref(v));
 		return v;
+	}
+	bool isBombCarrier() 
+	{
+		static auto is_c4_owner{ reinterpret_cast<bool(__thiscall*)(Entity*)>(pattern_scan("client.dll", "56 8B F1 85 F6 74 31")) };
+		return is_c4_owner(this);
 	}
 };
 

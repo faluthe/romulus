@@ -3,7 +3,9 @@
 #include "Entity.h"
 #include "IBaseClientDll.h"
 #include "interfaces.h"
+#include "localplayer.h"
 #include "Matrix.h"
+#include "IEngineTrace.h"
 #include "Vector.h"
 
 bool Entity::isGrenade()
@@ -47,6 +49,17 @@ Vector Entity::hitboxPos(int id)
 		}
 	}
 	return Vector{};
+}
+
+bool PlayerEntity::isVisible()
+{
+	if (!localplayer)
+		return false;
+
+	trace_t trace;
+
+	interfaces::engineTrace->TraceRay(Ray_t{ localplayer->eyePosition(), hitboxPos(0) }, 0x46004009, traceFilter{ localplayer }, trace);
+	return trace.entity == this;
 }
 
 void PlayerEntity::invalidateBoneCache()
