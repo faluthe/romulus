@@ -1,5 +1,7 @@
 #pragma once
 
+// https://github.com/perilouswithadollarsign/cstrike15_src/blob/master/public/vgui/ISurface.h
+
 #include "Color.h"
 #include "helper.h"
 
@@ -8,6 +10,7 @@ class ISurface
 public:
 	VIRTUAL_METHOD(void, DrawSetColor, 15, (int r, int g, int b, int a), (this, r, g, b, a))
 	VIRTUAL_METHOD(void, DrawFilledRect, 16, (int x0, int y0, int x1, int y1), (this, x0, y0, x1, y1))
+	VIRTUAL_METHOD(void, DrawFilledRect, 16, (float x0, float y0, float x1, float y1), (this, static_cast<int>(x0), static_cast<int>(y0), static_cast<int>(x1), static_cast<int>(y1)))
 	VIRTUAL_METHOD(void, DrawOutlinedRect, 18, (int x0, int y0, int x1, int y1), (this, x0, y0, x1, y1))
 	VIRTUAL_METHOD(void, DrawLine, 19, (int x0, int y0, int x1, int y1), (this, x0, y0, x1, y1))
 	VIRTUAL_METHOD(void, DrawSetTextFont, 23, (unsigned long font), (this, font))
