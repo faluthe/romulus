@@ -16,4 +16,5 @@ namespace colors
 	constexpr Color yellow{ 255, 255, 0, 255 };
 	constexpr Color red{ 255, 0, 0, 255 };
 	constexpr Color pink{ 255, 20, 147, 255 };
+	constexpr Color purple{ 148, 0, 211, 255 };
 }
