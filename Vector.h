@@ -129,6 +129,13 @@ public:
         return res;
     }
 
+    void normalize()
+    {
+        x = std::isfinite(x) ? std::remainderf(x, 360.0f) : 0.0f;
+        y = std::isfinite(y) ? std::remainderf(y, 360.0f) : 0.0f;
+        z = 0.0f;
+    }
+
     float DistTo(const Vector& vOther) const
     {
         Vector delta;
@@ -170,6 +177,10 @@ public:
         x = std::clamp(x, -89.0f, 89.0f);
         y = std::clamp(std::remainder(y, 360.0f), -180.0f, 180.0f);
         z = std::clamp(z, -50.0f, 50.0f);
+    }
+    bool notNull()
+    {
+        return x || y || z;
     }
 
     Vector& operator=(const Vector& vOther)

@@ -4,6 +4,7 @@
 
 #include "CUserCmd.h"
 #include "Vector.h"
+#include "IEngineTrace.h"
 
 struct model_t
 {
@@ -138,27 +139,75 @@ class player_move_data {
 public:
     bool    first_run_of_instructions : 1;
     bool    game_code_moved_player : 1;
-    int     player_handle;
-    int     impulse_command;
-    Vector	view_angles;
-    Vector	abs_view_angles;
-    int     buttons;
-    int     old_buttons;
-    float   fw_move;
-    float   sd_move;
-    float   up_move;
-    float   max_speed;
-    float   client_max_speed;
-    Vector	velocity;
-    Vector	angles;
-    Vector	old_angles;
-    float   step_height;
-    Vector	wish_velocity;
-    Vector	jump_velocity;
-    Vector	constraint_center;
-    float   constraint_radius;
-    float   constraint_width;
-    float   constraint_speed_factor;
+    int     player_handle{};
+    int     impulse_command{};
+    Vector	view_angles{};
+    Vector	abs_view_angles{};
+    int     buttons{};
+    int     old_buttons{};
+    float   fw_move{};
+    float   sd_move{};
+    float   up_move{};
+    float   max_speed{};
+    float   client_max_speed{};
+    Vector	velocity{};
+    Vector	angles{};
+    Vector	old_angles{};
+    float   step_height{};
+    Vector	wish_velocity{};
+    Vector	jump_velocity{};
+    Vector	constraint_center{};
+    float   constraint_radius{};
+    float   constraint_width{};
+    float   constraint_speed_factor{};
     float   u0[5];
-    Vector	abs_origin;
+    Vector	abs_origin{};
+};
+
+struct WeaponInfo
+{
+    char pad0[20];
+    int maxClip;
+    char pad1[112];
+    const char* name;
+    char pad2[60];
+    int type;
+    char pad3[4];
+    int price;
+    char pad4[8];
+    float cycletime;
+    char pad5[12];
+    bool fullAuto;
+    char pad6[3];
+    int damage;
+    float headshotMultiplier;
+    float armorRatio;
+    int bullets;
+    float penetration;
+    char pad7[8];
+    float range;
+    float rangeModifier;
+    char pad8[16];
+    bool silencer;
+    char pad9[15];
+    float maxSpeed;
+    float maxSpeedAlt;
+    char pad10[100];
+    float recoilMagnitude;
+    float recoilMagnitudeAlt;
+    char pad11[16];
+    float recoveryTimeStand;
+};
+
+struct BulletData
+{
+    BulletData(const Vector& eyePosition, Entity* entity) : source{ eyePosition }, filter{ entity } {}
+    Vector source;
+    trace_t enterTrace;
+    Vector direction;
+    traceFilter filter;
+    float traceLength;
+    float traceLengthRemaining;
+    float currentDamage;
+    int penetrateCount;
 };
