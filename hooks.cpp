@@ -1,6 +1,7 @@
 #pragma warning(disable : 26812)
 #include <MinHook.h>
 #include <stdexcept>
+#include <intrin.h>
 
 #include "backtrack.h"
 #include "config.h"
@@ -11,6 +12,7 @@
 #include "hooks.h"
 #include "interfaces.h"
 #include "localplayer.h"
+#include "sharedrecords.h"
 
 struct CUserCmd;
 
@@ -57,6 +59,7 @@ bool __stdcall hkCreateMove(float inputSampleTime, CUserCmd* cmd)
 	if (bSendDatagram)
 		backtrack::updateIncomingSequences();
 
+	antiflash();
 	autopistol(cmd);
 	bunnyhop(cmd);
 	convars::set();
@@ -65,10 +68,16 @@ bool __stdcall hkCreateMove(float inputSampleTime, CUserCmd* cmd)
 
 	static bool initBacktrack = []() { backtrack::init(); return true; } ();
 
-	backtrack::update();
+	sharedrecords::update();
 	
 	prediction::run(cmd);
+	// aimbot(cmd);
 	backtrack::run(cmd);
+
+	cmd->viewAngles.normalize();
+	cmd->viewAngles.x = std::clamp(cmd->viewAngles.x, -89.0f, 89.0f);
+	cmd->viewAngles.y = std::clamp(cmd->viewAngles.y, -180.0f, 180.0f);
+	cmd->viewAngles.z = 0.0f;
 
 	return false;
 }
@@ -95,7 +104,7 @@ void __stdcall hkFrameStageNotify(client_frame_stage_t frameStage)
 			*(uintptr_t*)((*(uintptr_t*)varMap) + index * 12) = flag;
 	};
 
-	// skinchanger(frameStage);
+	skinchanger(frameStage);
 
 	switch (frameStage)
 	{
@@ -130,6 +139,25 @@ void __stdcall hkPaintTraverse(unsigned int panel, bool forceRepaint, bool allow
 	}
 }
 
+bool __fastcall hkSv_cheats(void* _this)
+{
+	static auto camThink = pattern_scan("client.dll", "85 C0 75 30 38 86");
+
+	if (_ReturnAddress() == camThink)
+		return true;
+	else
+		return hooks::oSv_cheats(_this);
+}
+
+void __stdcall hkDoPostScreenEffects(void* param)
+{
+	if (interfaces::engine->IsInGame())
+	{
+		thirdperson();
+	}
+	return hooks::oDoPostScreenEffects(interfaces::clientMode, param);
+}
+
 namespace hooks
 {
 	void init()
@@ -141,11 +169,14 @@ namespace hooks
 		clientMode = Hook{ interfaces::clientMode };
 		mdlRender = Hook{ interfaces::mdlRender };
 		panel = Hook{ interfaces::panel };
+		sv_cheats = Hook{ interfaces::cvar->FindVar("sv_cheats") };
 
 		client.hookFunc(INDEX_FRAMESTAGENOTIFY, &hkFrameStageNotify, reinterpret_cast<void**>(&oFrameStageNotify));
 		clientMode.hookFunc(INDEX_CREATE_MOVE, &hkCreateMove, reinterpret_cast<void**>(&oCreateMove));
+		clientMode.hookFunc(44, &hkDoPostScreenEffects, reinterpret_cast<void**>(&oDoPostScreenEffects));
 		mdlRender.hookFunc(INDEX_DME, &hkDrawModelExecute, reinterpret_cast<void**>(&oDrawModelExecute));
 		panel.hookFunc(INDEX_PAINT_T, &hkPaintTraverse, reinterpret_cast<void**>(&oPaintTraverse));
+		sv_cheats.hookFunc(13, &hkSv_cheats, reinterpret_cast<void**>(&oSv_cheats));
 
 		if (MH_EnableHook(MH_ALL_HOOKS) != MH_OK)
 			throw std::runtime_error("Minhook error.");
@@ -162,5 +193,6 @@ namespace hooks
 			throw std::runtime_error("Minhook error.");
 
 		convars::restore();
+		restore_flash();
 	}
 }

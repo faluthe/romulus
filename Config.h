@@ -16,7 +16,7 @@ namespace config
 	inline Color enemyVisible{ 187, 68, 48, 255 };
 	inline Color enemyHidden{ colors::white };
 	inline Color friendlyVisible{ 244, 159, 10, 255 };
-	inline Color backtrack{ 7, 160, 195, 20 };
+	inline Color backtrack{ 7, 160, 195, 127 };
 	inline Color selectedTick{ 98, 76, 171, 127 };
 
 	inline bool handChams{ false };
@@ -28,6 +28,10 @@ namespace config
 	inline bool chamsIgnoreZ{ false };
 
 	inline bool silentAim{ true };
+
+	inline bool antiflash{ false };
+
+	inline int mindamage{ 20 };
 
 	void display();
 }

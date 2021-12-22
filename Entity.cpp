@@ -51,14 +51,14 @@ Vector Entity::hitboxPos(int id)
 	return Vector{};
 }
 
-bool PlayerEntity::isVisible()
+bool PlayerEntity::isVisible(const Vector& position)
 {
 	if (!localplayer)
 		return false;
 
 	trace_t trace;
 
-	interfaces::engineTrace->TraceRay(Ray_t{ localplayer->eyePosition(), hitboxPos(0) }, 0x46004009, traceFilter{ localplayer }, trace);
+	interfaces::engineTrace->TraceRay(Ray_t{ localplayer->eyePosition(), position }, 0x46004009, traceFilter{ localplayer }, trace);
 	return trace.entity == this;
 }
 
@@ -86,8 +86,10 @@ void LocalplayerEntity::aimAt(Vector pos, CUserCmd* cmd, bool silent)
 	auto vec{ pos - eyePosition() };
 	vector_angles(vec, angle);
 	angle -= (cmd->viewAngles + aimPunch() * 2.0f);
-	normalize3(angle);
-	angle.clamp();
+	angle.normalize();
+	angle.x = std::clamp(angle.x, -89.0f, 89.0f);
+	angle.y = std::clamp(angle.y, -180.0f, 180.0f);
+	angle.z = 0.0f;
 	cmd->viewAngles += angle;
 	if (!silent)
 		interfaces::engine->SetViewAngles(cmd->viewAngles);

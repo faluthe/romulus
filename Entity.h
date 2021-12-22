@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "config.h"
 #include "helper.h"
 #include "netvars.h"
 
@@ -10,6 +11,7 @@ struct CUserCmd;
 class Matrix;
 struct model_t;
 class WeaponEntity;
+struct WeaponInfo;
 class Vector;
 
 enum class OBSMode 
@@ -29,6 +31,27 @@ enum class Team
 	CT = 3
 };
 
+enum class WeaponType
+{
+	Knife = 0,
+	Pistol,
+	SubMachinegun,
+	Rifle,
+	Shotgun,
+	SniperRifle,
+	Machinegun,
+	C4,
+	Placeholder,
+	Grenade,
+};
+
+class Collideable
+{
+public:
+	VIRTUAL_METHOD(const Vector&, obbMins, 1, (), (this))
+	VIRTUAL_METHOD(const Vector&, obbMaxs, 2, (), (this))
+};
+
 class Entity
 {
 public:
@@ -36,6 +59,7 @@ public:
 	void* networkable() { return reinterpret_cast<void*>(this + 0x8); }
 
 	VIRTUAL_METHOD(ClientClass*, clientClass, 2, (), (networkable()))
+	VIRTUAL_METHOD(Collideable*, getCollideable, 3, (), (this))
 	VIRTUAL_METHOD(model_t*, model, 8, (), (animating()))
 	VIRTUAL_METHOD(Vector&, absOrigin, 10, (), (this))
 	VIRTUAL_METHOD(bool, setupBones, 13, (Matrix* out, int maximum, int mask, float time), (animating(), out, maximum, mask, time))
@@ -67,9 +91,16 @@ public:
 	NETVAR(float, simulationTime, "DT_CSPlayer", "m_flSimulationTime")
 	NETVAR(int, tickBase, "DT_CSPlayer", "m_nTickBase")
 	NETVAR(bool, gunGameImmunity, "DT_CSPlayer", "m_bGunGameImmunity")
+	NETVAR(bool, isDefusing, "DT_CSPlayer", "m_bIsDefusing")
+	NETVAR(bool, hasDefuseKit, "DT_CSPlayer", "m_bHasDefuser")
+	NETVAR(float, flashAlpha, "DT_CSPlayer", "m_flFlashMaxAlpha")
+	NETVAR(float, flashDuration, "DT_CSPlayer", "m_flFlashDuration")
+	NETVAR(int, shotsFired, "DT_CSPlayer", "m_iShotsFired")
+	NETVAR(Vector, velocity, "DT_BasePlayer", "m_vecVelocity[0]")
+	NETVAR(bool, hasHelmet, "DT_CSPlayer", "m_bHasHelmet")
 
 	bool isAlive() { return (health() > 0); }
-	bool isVisible();
+	bool isVisible(const Vector& position);
 	void invalidateBoneCache();
 	WeaponEntity* activeWeapon();
 	
@@ -93,13 +124,15 @@ public:
 	NETVAR(unsigned int*, weapons, "DT_CSPlayer", "m_hMyWeapons")
 	NETVAR(Vector, aimPunch, "DT_BasePlayer", "m_aimPunchAngle")
 	NETVAR(int, viewmodel, "DT_BasePlayer", "m_hViewModel[0]")
-	void aimAt(Vector pos, CUserCmd* cmd, bool silent = true);
+	void aimAt(Vector pos, CUserCmd* cmd, bool silent = config::silentAim);
 };
 
 class WeaponEntity : public Entity
 {
 public:
-	VIRTUAL_METHOD(int, weaponType, 455, (), (this))
+	VIRTUAL_METHOD(WeaponType, weaponType, 455, (), (this))
+	VIRTUAL_METHOD(WeaponInfo*, weaponData, 461, (), (this))
+	VIRTUAL_METHOD(float, inaccuracy, 483, (), (this))
 
 	NETVAR(int, itemDefIndex, "DT_BaseCombatWeapon", "m_iItemDefinitionIndex")
 	NETVAR(int, paintKit, "DT_BaseAttributableItem", "m_nFallbackPaintKit")
@@ -110,9 +143,10 @@ public:
 	NETVAR(int, fallbackSeed, "DT_BaseAttributableItem", "m_nFallbackSeed")
 	NETVAR(int, itemId, "DT_BaseAttributableItem", "m_iItemIDHigh")
 	NETVAR(int, hWorldModel, "DT_BaseCombatWeapon", "m_hWeaponWorldModel")
+	NETVAR(float, nextPrimaryAttack, "DT_BaseCombatWeapon", "m_flNextPrimaryAttack")
 	
-	bool isKnife() { return weaponType() == 0; }
-	bool isPistol() { return weaponType() == 1; }
+	bool isKnife() { return weaponType() == WeaponType::Knife; }
+	bool isPistol() { return weaponType() == WeaponType::Pistol; }
 	bool isRevolver() { return (itemDefIndex() == 64 || itemDefIndex() == 262208); }
 
 	std::wstring weaponTypeStr();

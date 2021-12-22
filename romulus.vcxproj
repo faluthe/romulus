@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\pat\source\repos\minhook\minhook-master\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\pat\source\repos\minhook\minhook-master\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\VS Projects\MH\minhook\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\VS Projects\MH\minhook\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\pat\source\repos\minhook\minhook-master\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\pat\source\repos\minhook\minhook-master\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\VS Projects\MH\minhook\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\VS Projects\MH\minhook\build\VC16\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -94,7 +94,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -112,7 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,35 +157,77 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="aimbot.cpp" />
+    <ClCompile Include="autopistol.cpp" />
+    <ClCompile Include="backtrack.cpp" />
     <ClCompile Include="bunnyhop.cpp" />
+    <ClCompile Include="chams.cpp" />
+    <ClCompile Include="config.cpp" />
+    <ClCompile Include="convars.cpp" />
+    <ClCompile Include="crosshair.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="engineprediction.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="esp.cpp" />
+    <ClCompile Include="fakeping.cpp" />
     <ClCompile Include="helper.cpp" />
     <ClCompile Include="Hook.cpp" />
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="infopanel.cpp" />
     <ClCompile Include="interfaces.cpp" />
+    <ClCompile Include="localplayer.cpp" />
+    <ClCompile Include="misc.cpp" />
     <ClCompile Include="netvars.cpp" />
     <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="sharedrecords.cpp" />
+    <ClCompile Include="skinchanger.cpp" />
+    <ClCompile Include="SpoofVar.cpp" />
+    <ClCompile Include="structs.cpp" />
+    <ClCompile Include="triggerbot.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bunnyhop.h" />
+    <ClInclude Include="backtrack.h" />
+    <ClInclude Include="CClientState.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="ConVar.h" />
+    <ClInclude Include="convars.h" />
     <ClInclude Include="CUserCmd.h" />
+    <ClInclude Include="engineprediction.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="features.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="Hook.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="IBaseClientDll.h" />
     <ClInclude Include="IClientEntityList.h" />
-    <ClInclude Include="infopanel.h" />
+    <ClInclude Include="ICvar.h" />
+    <ClInclude Include="IEngineTrace.h" />
+    <ClInclude Include="IInput.h" />
+    <ClInclude Include="IMaterial.h" />
+    <ClInclude Include="IMaterialSystem.h" />
+    <ClInclude Include="INetChannel.h" />
+    <ClInclude Include="INetChannelInfo.h" />
     <ClInclude Include="interfaces.h" />
     <ClInclude Include="IPanel.h" />
+    <ClInclude Include="IStudioRender.h" />
     <ClInclude Include="ISurface.h" />
+    <ClInclude Include="ISurfaceData.h" />
     <ClInclude Include="IVEngineClient.h" />
+    <ClInclude Include="IVModelInfo.h" />
+    <ClInclude Include="IVModelRender.h" />
+    <ClInclude Include="localplayer.h" />
     <ClInclude Include="netvars.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="PlayerGameMovement.h" />
+    <ClInclude Include="PlayerMoveHelper.h" />
+    <ClInclude Include="PlayerPrediction.h" />
     <ClInclude Include="Recv.h" />
+    <ClInclude Include="sharedrecords.h" />
+    <ClInclude Include="SpoofVar.h" />
+    <ClInclude Include="structs.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Matrix.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="libMinHook.x86.lib" />

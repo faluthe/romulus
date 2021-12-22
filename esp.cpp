@@ -8,6 +8,7 @@
 #include "helper.h"
 #include "interfaces.h"
 #include "localplayer.h"
+#include "sharedrecords.h"
 #include "structs.h"
 #include "Vector.h"
 
@@ -84,6 +85,10 @@ void player_esp()
 		// Bomb carrier
 		if (ent->isBombCarrier())
 			print_text(L"Bomb", box.right + 10, box.bottom + 45, colors::yellow, espFont);
+		
+		// Is Defusing
+		if (ent->isDefusing())
+			print_text(ent->hasDefuseKit() ? L"Is Defusing (WITH KIT)" : L"Is Defusing (No Kit)", box.right + 10, box.bottom + 45, colors::yellow, espFont);
 	}
 }
 
@@ -187,7 +192,7 @@ void backtrack_ticks()
 	{
 		const auto ent = entityList->GetClientEntity<PlayerEntity>(i);
 
-		if (!ent || !ent->isAlive() || ent->dormant() || ent->team() == localplayer->team() || !ent->isVisible())
+		if (!ent || !ent->isAlive() || ent->dormant() || ent->team() == localplayer->team())  // || !ent->isVisible(ent->hitboxPos(0)))
 			continue;
 
 		auto entRecords = records[ent->entityListIndex()];
@@ -200,7 +205,7 @@ void backtrack_ticks()
 			Vector pos;
 			world_to_screen(entRecords[k].head, pos);
 			surface->DrawSetColor(colors::white);
-			surface->DrawFilledRect(pos.x, pos.y, pos.x + 1, pos.y + 1);
+			surface->DrawFilledRect(pos.x - 1, pos.y - 1, pos.x + 1, pos.y + 1);
 		}
 	}
 }

@@ -33,13 +33,16 @@ namespace hooks
 	inline Hook mdlRender;
 	inline Hook netChannel;
 	inline Hook panel;
+	inline Hook sv_cheats;
 
 	// Originals
 	inline bool(__stdcall* oCreateMove)(float, CUserCmd*);
+	inline void(__thiscall* oDoPostScreenEffects)(void*, void*);
 	inline void(__thiscall* oPaintTraverse)(IPanel*, unsigned int, bool, bool);
 	inline void(__fastcall* oDrawModelExecute)(void*, void*, void*, const ModelRenderInfo_t&, const ModelRenderInfo_t&, void*);
 	inline void(__thiscall* oFrameStageNotify)(void*, client_frame_stage_t);
 	inline int(__thiscall* oSendDatagram)(INetChannel*, void*);
+	inline bool(__thiscall* oSv_cheats)(void*);
 
 	void init();
 	void restore();

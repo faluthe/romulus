@@ -12,3 +12,7 @@ void external_xhair();
 void infopanel();
 void render_esp();
 void skinchanger(client_frame_stage_t stage);
+void antiflash();
+void restore_flash();
+void thirdperson();
+void aimbot(CUserCmd* cmd);

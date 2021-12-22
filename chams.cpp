@@ -7,6 +7,7 @@
 #include "hooks.h"
 #include "interfaces.h"
 #include "localplayer.h"
+#include "sharedrecords.h"
 
 IMaterial* material{};
 
@@ -69,7 +70,7 @@ void chams(void* _this, void* _edx, void* context, const ModelRenderInfo_t& stat
 	{
 		const auto ent{ interfaces::entityList->GetClientEntity<PlayerEntity>(pInfo.entityIndex) };
 
-		if (!ent || ent->dormant() || !ent->isAlive())
+		if (!ent || ent->dormant() || !ent->isAlive() || ent == localplayer)
 			return;
 
 		if (localplayer->team() != ent->team())

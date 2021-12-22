@@ -51,7 +51,7 @@ void DynamicPanel::display(int index, float displayOption)
 {
 	children.at(index).hidden = false;
 	auto wstr{ std::to_wstring(displayOption) };
-	wstr.erase(wstr.begin() + wstr.find(L'.') + 2, wstr.end()); // One point of precision
+	wstr.erase(wstr.begin() + wstr.find(L'.') + 4, wstr.end()); // Two points of precision
 	children.at(index).option = wstr;
 }
 

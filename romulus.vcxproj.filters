@@ -8,23 +8,77 @@
     <ClCompile Include="netvars.cpp">
       <Filter>netvars</Filter>
     </ClCompile>
-    <ClCompile Include="hooks.cpp">
-      <Filter>hooks</Filter>
+    <ClCompile Include="Panel.cpp">
+      <Filter>sdk\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="SpoofVar.cpp">
+      <Filter>sdk\SpoofVar</Filter>
+    </ClCompile>
+    <ClCompile Include="convars.cpp">
+      <Filter>features\convars</Filter>
     </ClCompile>
     <ClCompile Include="Hook.cpp">
-      <Filter>hooks</Filter>
+      <Filter>hooks\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="hooks.cpp">
+      <Filter>hooks\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="helper.cpp">
+      <Filter>sdk\helper</Filter>
+    </ClCompile>
+    <ClCompile Include="localplayer.cpp">
+      <Filter>sdk\localplayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>sdk\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>config</Filter>
+    </ClCompile>
+    <ClCompile Include="backtrack.cpp">
+      <Filter>features\backtrack</Filter>
+    </ClCompile>
+    <ClCompile Include="engineprediction.cpp">
+      <Filter>sdk\engineprediction</Filter>
+    </ClCompile>
+    <ClCompile Include="structs.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="fakeping.cpp">
+      <Filter>features\backtrack</Filter>
+    </ClCompile>
+    <ClCompile Include="autopistol.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="bunnyhop.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="chams.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="crosshair.cpp">
+      <Filter>features</Filter>
     </ClCompile>
     <ClCompile Include="infopanel.cpp">
       <Filter>features</Filter>
     </ClCompile>
-    <ClCompile Include="helper.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="Panel.cpp">
-      <Filter>sdk\Panel</Filter>
-    </ClCompile>
-    <ClCompile Include="bunnyhop.cpp">
+    <ClCompile Include="triggerbot.cpp">
       <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="esp.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="skinchanger.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="misc.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="aimbot.cpp">
+      <Filter>features</Filter>
+    </ClCompile>
+    <ClCompile Include="sharedrecords.cpp">
+      <Filter>features\sharedrecords</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +106,36 @@
     <Filter Include="sdk\Panel">
       <UniqueIdentifier>{04e99e55-ab36-457d-aaab-5efb87d8f3a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk\SpoofVar">
+      <UniqueIdentifier>{02b7e020-0549-43d0-bdc9-b22fedcb2c57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\convars">
+      <UniqueIdentifier>{312adc85-084e-4154-8a55-601d860c9df1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\Hook">
+      <UniqueIdentifier>{2d514477-ba65-487b-a56f-d45e96e2a240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hooks\hooks">
+      <UniqueIdentifier>{24aab502-c483-4f2b-bbf4-bdf1923fe39f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\helper">
+      <UniqueIdentifier>{0766d3bd-bbd4-4813-91db-5669652baaa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\localplayer">
+      <UniqueIdentifier>{5222a121-afdf-4c4f-834c-9309bfb42b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\Entity">
+      <UniqueIdentifier>{7e393505-5236-41c2-af61-c8a6adcb78af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\backtrack">
+      <UniqueIdentifier>{93187c6b-6841-4f48-802f-960ae0bc8d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk\engineprediction">
+      <UniqueIdentifier>{f6f7b4c8-b505-447b-a1bf-08053d07f1b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\sharedrecords">
+      <UniqueIdentifier>{86651ffd-ec67-47ce-bfb9-c969da51153e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -63,23 +147,11 @@
     <ClInclude Include="netvars.h">
       <Filter>netvars</Filter>
     </ClInclude>
-    <ClInclude Include="hooks.h">
-      <Filter>hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Hook.h">
-      <Filter>hooks</Filter>
-    </ClInclude>
     <ClInclude Include="IPanel.h">
       <Filter>valve</Filter>
     </ClInclude>
     <ClInclude Include="ISurface.h">
       <Filter>valve</Filter>
-    </ClInclude>
-    <ClInclude Include="infopanel.h">
-      <Filter>features</Filter>
-    </ClInclude>
-    <ClInclude Include="helper.h">
-      <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>sdk</Filter>
@@ -96,16 +168,100 @@
     <ClInclude Include="CUserCmd.h">
       <Filter>valve</Filter>
     </ClInclude>
-    <ClInclude Include="bunnyhop.h">
-      <Filter>features</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
     <ClInclude Include="IClientEntityList.h">
       <Filter>valve</Filter>
     </ClInclude>
     <ClInclude Include="Recv.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="ICvar.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="ConVar.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="SpoofVar.h">
+      <Filter>sdk\SpoofVar</Filter>
+    </ClInclude>
+    <ClInclude Include="convars.h">
+      <Filter>features\convars</Filter>
+    </ClInclude>
+    <ClInclude Include="Hook.h">
+      <Filter>hooks\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks.h">
+      <Filter>hooks\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="IVModelRender.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="IMaterial.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="IMaterialSystem.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="helper.h">
+      <Filter>sdk\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="IEngineTrace.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="localplayer.h">
+      <Filter>sdk\localplayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="IVModelInfo.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>sdk\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="structs.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="IStudioRender.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="backtrack.h">
+      <Filter>features\backtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="INetChannelInfo.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="engineprediction.h">
+      <Filter>sdk\engineprediction</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGameMovement.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMoveHelper.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerPrediction.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="INetChannel.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="CClientState.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="features.h">
+      <Filter>features</Filter>
+    </ClInclude>
+    <ClInclude Include="IInput.h">
+      <Filter>valve</Filter>
+    </ClInclude>
+    <ClInclude Include="sharedrecords.h">
+      <Filter>features\sharedrecords</Filter>
+    </ClInclude>
+    <ClInclude Include="ISurfaceData.h">
       <Filter>valve</Filter>
     </ClInclude>
   </ItemGroup>

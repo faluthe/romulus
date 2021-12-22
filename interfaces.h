@@ -4,11 +4,13 @@
 #include "IClientEntityList.h"
 #include "ICvar.h"
 #include "IEngineTrace.h"
+#include "IInput.h"
 #include "IMaterialSystem.h"
 #include "INetChannel.h"
 #include "IPanel.h"
 #include "IStudioRender.h"
 #include "ISurface.h"
+#include "ISurfaceData.h"
 #include "IVEngineClient.h"
 #include "IVModelInfo.h"
 #include "IVModelRender.h"
@@ -28,6 +30,7 @@ namespace interfaces
 	inline IEngineTrace* engineTrace{};
 	inline PlayerGameMovement* gameMovement{};
 	inline CGlobalVarsBase* globalVars{};
+	inline IInput* input{};
 	inline IMaterialSystem* matSys{};
 	inline IVModelInfo* mdlInfo{};
 	inline IVModelRender* mdlRender{};
@@ -37,6 +40,7 @@ namespace interfaces
 	inline PlayerPrediction* playerPrediction{};
 	inline IStudioRender* studioRender{};
 	inline ISurface* surface{};
+	inline IPhysicsSurfaceProps* surfaceData{};
 
 	void init();
 }

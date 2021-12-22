@@ -35,6 +35,7 @@ namespace interfaces
 		engineTrace = get_interface<IEngineTrace>(engineDll, "EngineTraceClient004");
 		gameMovement = get_interface<PlayerGameMovement>(clientDll, "GameMovement001");
 		globalVars = **reinterpret_cast<CGlobalVarsBase***>((*reinterpret_cast<uintptr_t**>(client))[0xB] + 0xA);
+		input = *reinterpret_cast<IInput**>((*reinterpret_cast<uintptr_t**>(client))[0x10] + 0x1);
 		matSys = get_interface<IMaterialSystem>(GetModuleHandleA("materialsystem.dll"), "VMaterialSystem080");
 		mdlInfo = get_interface<IVModelInfo>(engineDll, "VModelInfoClient004");
 		mdlRender = get_interface<IVModelRender>(engineDll, "VEngineModel016");
@@ -43,5 +44,6 @@ namespace interfaces
 		playerPrediction = get_interface<PlayerPrediction>(clientDll, "VClientPrediction001");
 		studioRender = get_interface<IStudioRender>(GetModuleHandleA("studiorender.dll"), "VStudioRender026");
 		surface = get_interface<ISurface>(GetModuleHandleA("vguimatsurface.dll"), "VGUI_Surface031");
+		surfaceData = get_interface<IPhysicsSurfaceProps>(GetModuleHandleA("vphysics.dll"), "VPhysicsSurfaceProps001");
 	}
 }

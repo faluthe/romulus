@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 
+#include "Entity.h"
 #include "helper.h"
 #include "interfaces.h"
 
@@ -10,36 +11,23 @@ bool set_font(unsigned long& font, int size, int weight)
     return interfaces::surface->SetFontGlyphSet(font, "Tahoma", size, weight, 0, 0, 0x200);
 }
 
-void print_text(std::wstring text, int x, int y, const Color& col, unsigned long font)
+void print_text(std::wstring text, int x, int y, const Color& col, unsigned long font, bool centered)
 {
     using namespace interfaces;
+    
     surface->DrawSetTextFont(font);
     surface->DrawSetTextColor(col.r, col.g, col.b, col.a);
-    surface->DrawSetTextPos(x, y);
-    surface->DrawPrintText(text.c_str(), text.size());
-}
-
-std::wstring weapontype_to_wstring(int type)
-{
-    switch (type)
+    
+    if (centered)
     {
-    case 0:
-        return L"Knife(0)";
-    case 1:
-        return L"Pistol(1)";
-    case 2:
-        return L"SMG(2)";
-    case 3:
-        return L"Rifle(3)";
-    case 4:
-        return L"Shotgun(4)";
-    case 5:
-        return L"Sniper(5)";
-    case 6:
-        return L"Machine Gun(6)";
-    default:
-        return L"Error(" + std::to_wstring(type) + L")";
+        int wide, tall;
+        surface->GetTextSize(font, text.c_str(), wide, tall);
+        surface->DrawSetTextPos(x - (wide / 2), y - (tall / 2));
     }
+    else
+        surface->DrawSetTextPos(x, y);
+    
+    surface->DrawPrintText(text.c_str(), text.size());
 }
 
 bool screen_transform(const Vector& in, Vector& out)
@@ -87,7 +75,7 @@ void transform_vector(const Vector& in1, Matrix& in2, Vector& out)
     out[2] = in1.Dot(in2[2]) + in2[2][3];
 }
 
-void vector_angles(Vector& forward, Vector& angles)
+void vector_angles(const Vector& forward, Vector& angles)
 {
     Vector view;
     if (forward[1] == 0.0f && forward[0] == 0.0f)
@@ -112,6 +100,31 @@ void vector_angles(Vector& forward, Vector& angles)
     angles[2] = 0.0f;
 }
 
+void angle_vectors(Vector& angles, Vector& forward)
+{
+    float sp, sy, cp, cy;
+
+    sy = sin(DEG2RAD(angles[1]));
+    cy = cos(DEG2RAD(angles[1]));
+
+    sp = sin(DEG2RAD(angles[0]));
+    cp = cos(DEG2RAD(angles[0]));
+
+    forward.x = cp * cy;
+    forward.y = cp * sy;
+    forward.z = -sp;
+}
+
+float normalizeVector(Vector& v)
+{
+    float length{ v.Length() };
+    if (length != 0.0f)
+        v /= length;
+    else
+        v.x = v.y = 0.0f; v.z = 1.0f;
+    return length;
+}
+
 void sin_cos(float r, float* s, float* c)
 {
     *s = sin(r);
@@ -126,6 +139,11 @@ constexpr float RAD2DEG(const float x)
 constexpr float DEG2RAD(const float x) 
 {
     return (float)(x) * (float)(static_cast<float>(3.14159265358979323846) / 180.f);
+}
+
+Vector VectortoFart(const Vector& v)
+{
+    return Vector{ RAD2DEG(std::atan2(-v.z, std::hypot(v.x, v.y))), RAD2DEG(std::atan2(v.y, v.x)), 0.0f };
 }
 
 void angle_vectors(const Vector& angles, Vector& forward)

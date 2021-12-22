@@ -95,6 +95,9 @@
 #define MDLRENDER_FORCEMATOVERIDE 1
 #define MDLRENDER_ISFORCEDMAT 2
 
+inline unsigned long infoFont;
+inline int screenW, screenH;
+
 template<typename ReturnType, int index, typename ...Arguments>
 constexpr ReturnType call_virtual_method(void* pInterface, Arguments... arguments)
 {
@@ -109,21 +112,24 @@ type functionName functionArgs \
 
 bool set_font(unsigned long& font, int size, int weight = 550);
 
-void print_text(std::wstring text, int x, int y, const Color& col, unsigned long font);
-
-std::wstring weapontype_to_wstring(int type);
+void print_text(std::wstring text, int x, int y, const Color& col, unsigned long font, bool centered = false);
 
 bool world_to_screen(const Vector& in, Vector& out);
 
 void transform_vector(const Vector& in1, Matrix& in2, Vector& out);
 
-void vector_angles(Vector& forward, Vector& angles);
+void vector_angles(const Vector& forward, Vector& angles);
+void angle_vectors(Vector& angles, Vector& forward);
+
+float normalizeVector(Vector& v);
 
 Vector CalcAngle(const Vector& source, const Vector& destination);
 
 constexpr float RAD2DEG(const float x);
 
 constexpr float DEG2RAD(const float x);
+
+Vector VectortoFart(const Vector& v);
 
 template<typename T>
 void normalize3(T& vec)

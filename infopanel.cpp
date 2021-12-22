@@ -11,12 +11,9 @@
 #include "Panel.h"
 #include "structs.h"
 
-unsigned long infoFont;
-int screenW, screenH;
-
 void debugpanel()
 {
-	static DynamicPanel debug{ L"Debug", infoFont, screenW - (screenW / 4), 3 };
+	static DynamicPanel debug{ L"Debug", infoFont, screenW - (screenW / 3), 3 };
 
 	static int viewmodel{ debug.add_child(L"viewmodel_fov") };
 	static int moveType{ debug.add_child(L"Move type") };
@@ -27,6 +24,10 @@ void debugpanel()
 	static int weaponClassId{ debug.add_child(L"Weapon class") };
 	static int maxPlayers{ debug.add_child(L"Players") };
 	static int maxEnts{ debug.add_child(L"Entities") };
+	static int flashDuration{ debug.add_child(L"Flash duration") };
+	static int flashAlpha{ debug.add_child(L"Flash Alpha") };
+	static int globalTime{ debug.add_child(L"Time") };
+	static int inaccuracy{ debug.add_child(L"Inaccuracy") };
 
 	debug.display(viewmodel, convars::viewmodel_fov->GetFloat());
 
@@ -35,12 +36,16 @@ void debugpanel()
 		debug.display(health, localplayer->health());
 		debug.display(moveType, localplayer->moveType());
 		debug.display(playerFlags, localplayer->flags());
-		
+		debug.display(flashDuration, localplayer->flashDuration());
+		debug.display(flashAlpha, localplayer->flashAlpha());
+		debug.display(globalTime, interfaces::globalVars->curtime);
+
 		if (const auto weapon{ localplayer->activeWeapon() })
 		{
-			debug.display(weaponType, weapontype_to_wstring(weapon->weaponType()));
+			debug.display(weaponType, L"Boobs");
 			debug.display(defIndex, weapon->itemDefIndex());
 			debug.display(weaponClassId, weapon->weaponTypeStr());
+			debug.display(inaccuracy, weapon->inaccuracy());
 		}
 		
 		int players{};
@@ -199,7 +204,8 @@ void infopanel()
 	if (!infoFont && !set_font(infoFont, 20))
 		return;
 
-	interfaces::engine->GetScreenSize(screenW, screenH);
+	if (!screenW || !screenH)
+		interfaces::engine->GetScreenSize(screenW, screenH);
 	
 	static Color rainbow{ 255, 0, 0, 255 };
 	static int rainbowState{ 0 };

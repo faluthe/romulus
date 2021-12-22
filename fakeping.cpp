@@ -1,3 +1,5 @@
+#include <deque>
+
 #include "backtrack.h"
 #include "INetChannel.h"
 #include "interfaces.h"
